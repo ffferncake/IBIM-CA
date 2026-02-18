@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 18
+VisualStudioVersion = 18.3.11505.172 d18.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IBIMCA", "IBIMCA.csproj", "{1536BF62-7A96-7CBC-72F3-0B1C28F51BCC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug R23|Any CPU = Debug R23|Any CPU
+		Debug R24|Any CPU = Debug R24|Any CPU
+		Debug R25|Any CPU = Debug R25|Any CPU
+		Debug R26|Any CPU = Debug R26|Any CPU
+		Release R23|Any CPU = Release R23|Any CPU
+		Release R24|Any CPU = Release R24|Any CPU
+		Release R25|Any CPU = Release R25|Any CPU
+		Release R26|Any CPU = Release R26|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1536BF62-7A96-7CBC-72F3-0B1C28F51BCC}.Debug R23|Any CPU.ActiveCfg = Debug R23|Any CPU
+		{1536BF62-7A96-7CBC-72F3-0B1C28F51BCC}.Debug R23|Any CPU.Build.0 = Debug R23|Any CPU
+		{1536BF62-7A96-7CBC-72F3-0B1C28F51BCC}.Debug R24|Any CPU.ActiveCfg = Debug R24|Any CPU
+		{1536BF62-7A96-7CBC-72F3-0B1C28F51BCC}.Debug R24|Any CPU.Build.0 = Debug R24|Any CPU
+		{1536BF62-7A96-7CBC-72F3-0B1C28F51BCC}.Debug R25|Any CPU.ActiveCfg = Debug R25|Any CPU
+		{1536BF62-7A96-7CBC-72F3-0B1C28F51BCC}.Debug R25|Any CPU.Build.0 = Debug R25|Any CPU
+		{1536BF62-7A96-7CBC-72F3-0B1C28F51BCC}.Debug R26|Any CPU.ActiveCfg = Debug R26|Any CPU
+		{1536BF62-7A96-7CBC-72F3-0B1C28F51BCC}.Debug R26|Any CPU.Build.0 = Debug R26|Any CPU
+		{1536BF62-7A96-7CBC-72F3-0B1C28F51BCC}.Release R23|Any CPU.ActiveCfg = Release R23|Any CPU
+		{1536BF62-7A96-7CBC-72F3-0B1C28F51BCC}.Release R23|Any CPU.Build.0 = Release R23|Any CPU
+		{1536BF62-7A96-7CBC-72F3-0B1C28F51BCC}.Release R24|Any CPU.ActiveCfg = Release R24|Any CPU
+		{1536BF62-7A96-7CBC-72F3-0B1C28F51BCC}.Release R24|Any CPU.Build.0 = Release R24|Any CPU
+		{1536BF62-7A96-7CBC-72F3-0B1C28F51BCC}.Release R25|Any CPU.ActiveCfg = Release R25|Any CPU
+		{1536BF62-7A96-7CBC-72F3-0B1C28F51BCC}.Release R25|Any CPU.Build.0 = Release R25|Any CPU
+		{1536BF62-7A96-7CBC-72F3-0B1C28F51BCC}.Release R26|Any CPU.ActiveCfg = Release R26|Any CPU
+		{1536BF62-7A96-7CBC-72F3-0B1C28F51BCC}.Release R26|Any CPU.Build.0 = Release R26|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {74E5F7B6-7B85-4249-AD40-97325D0DC313}
+	EndGlobalSection
+EndGlobal

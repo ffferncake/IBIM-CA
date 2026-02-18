@@ -1,0 +1,303 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Audit" xml:space="preserve">
+    <value>Tools relating to cleaning the model.</value>
+  </data>
+  <data name="Audit_DeletePatterns" xml:space="preserve">
+    <value>Deletes all Fill and Line Patterns found in the current document that begin with the word 'Import'.
+
+Condition(s) to run:
+- The current document is a project or family
+
+Warning:
+This tool will not provide a list to choose from - it will go straight to deletion.</value>
+  </data>
+  <data name="Audit_PurgeFilters" xml:space="preserve">
+    <value>Provides a list of all unused View Filters in the current document, from which you can choose which ones to delete from the model.
+
+Condition(s) to run:
+- The current document is a project
+
+Note:
+This tool will check all Views and View Templates for used filters.</value>
+  </data>
+  <data name="Audit_PurgeRooms" xml:space="preserve">
+    <value>Provides a list of all unplaced rooms in the current document, from which you can choose which ones to delete from the model.
+
+Condition(s) to run:
+- The current document is a project</value>
+  </data>
+  <data name="Audit_PurgeTemplates" xml:space="preserve">
+    <value>Provides a list of all unused View Templates in the current document, from which you can choose which ones to delete from the model.
+
+Condition(s) to run:
+- The current document is a project
+
+Note:
+This tool will check all Views and View Family Types for assigned and default templates.</value>
+  </data>
+  <data name="Export" xml:space="preserve">
+    <value>Tools relating to  exporting data from Revit.</value>
+  </data>
+  <data name="Export_Schedule" xml:space="preserve">
+    <value>Exports the contents of the active schedule view to Excel.
+
+Condition(s) to run:
+- Current view is a schedule</value>
+  </data>
+  <data name="Export_SheetsDwg" xml:space="preserve">
+    <value>Exports selected sheets from Revit to DWG, using internal coordinates.
+
+Condition(s) to run:
+- The current document is a project
+
+Notes:
+The tool will apply a generic naming rule to exported documents.
+
+Shift + click:
+Uses shared coordinates instead.</value>
+  </data>
+  <data name="Export_SheetsPdf" xml:space="preserve">
+    <value>Exports selected sheets from Revit to PDF.
+
+Condition(s) to run:
+- The current document is a project
+
+Notes:
+The tool will apply a generic naming rule to exported documents. The built-in Pdf exporter is used for the exporting process, which automatically detects page sizes.
+
+Shift + click:
+Shows crop boundaries (hidden by default).</value>
+  </data>
+  <data name="General_About" xml:space="preserve">
+    <value>Takes you to the project's github.</value>
+  </data>
+  <data name="Import" xml:space="preserve">
+    <value>Tools relating to importing information to Revit.</value>
+  </data>
+  <data name="Import_CreateSheets" xml:space="preserve">
+    <value>Using the templated Excel file, creates new sheets and updates the names of existing ones provided.
+
+Condition(s) to run:
+- The current document is a project</value>
+  </data>
+  <data name="Import_SheetsExcel" xml:space="preserve">
+    <value>Saves a template for entering sheet information that can be imported back into Revit.
+
+Condition(s) to run:
+- The current document is a project
+
+Shift + click:
+Exports all sheet names and numbers to the template.</value>
+  </data>
+  <data name="Revision" xml:space="preserve">
+    <value>Tools relating to revision management.</value>
+  </data>
+  <data name="Revision_BulkRev" xml:space="preserve">
+    <value>Adds a chosen revision to sheets, selected from a list. If the revision is already applied to a sheet, it will skip that sheet.
+
+Condition(s) to run:
+- Current document is a project
+
+Shift + click:
+Removes the chosen revision instead.</value>
+  </data>
+  <data name="Revision_DocTrans" xml:space="preserve">
+    <value>Given chosen revisions and sheets, will generate an Excel based document transmittal ('doctrans') that summarizes the revision numbers on those sheets.
+
+Condition(s) to run:
+- Current document is a project</value>
+  </data>
+  <data name="Revision_RevSet" xml:space="preserve">
+    <value>Given a chosen revision, creates a new sheet set for all sheets with that revision.
+
+Condition(s) to run:
+- Current document is a project
+
+Note:
+If the sheet set already exists, it will be deleted and re-created.</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>Tools relating to selection tasks.</value>
+  </data>
+  <data name="Select_GetHidden" xml:space="preserve">
+    <value>Enables reveal hidden elements mode, then selects any elements that are hidden in the active view.
+
+Condition(s) to run:
+- The current document is a project.</value>
+  </data>
+  <data name="Select_GetTtbs" xml:space="preserve">
+    <value>For all currently selected sheets, will in turn select any titleblock(s) on them.
+
+Condition(s) to run:
+- Sheets are selected</value>
+  </data>
+  <data name="Select_PickRooms" xml:space="preserve">
+    <value>Puts Revit into a mode where you can only select rooms.
+
+Condition(s) to run:
+- The current document is a project.</value>
+  </data>
+  <data name="Select_PickWalls" xml:space="preserve">
+    <value>Puts Revit into a mode where you can only select walls.
+
+Condition(s) to run:
+- The current document is a project.</value>
+  </data>
+  <data name="Select_RemoveGrouped" xml:space="preserve">
+    <value>Removes any grouped elements (and groups) from the current selection.
+
+Condition(s) to run:
+- Elements are selected</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>This menu contains various tools to toggle IBIMCA's features.</value>
+  </data>
+  <data name="Settings_ColourTabs" xml:space="preserve">
+    <value>Toggles the colouring of view tabs by document.
+
+Note:
+Tab colouring will override default Revit tab colouring behavior. Whilst this setting can be disabled afterwards, you will need to restart Revit to reinstate default tab colouring afterwards.</value>
+  </data>
+  <data name="Settings_UiToggle" xml:space="preserve">
+    <value>Toggles between light and dark mode.
+
+Shift + Click:
+Sets the canvas theme to Dark instead of light.</value>
+  </data>
+  <data name="Settings_Warden" xml:space="preserve">
+    <value>Toggles the Warden feature.
+
+Warden is a simple command interceptor, which will verify if you want to use bad practice commands before they execute.</value>
+  </data>
+  <data name="Workset" xml:space="preserve">
+    <value>Tools relating to worksets.</value>
+  </data>
+  <data name="Workset_Create" xml:space="preserve">
+    <value>Creates worksets from a fixed standard, chosen from a list of names.
+
+Condition(s) to run:
+- The current document is a project
+- The current document is workshared
+
+Notes:
+The tool will offer to rename the 'Shared Levels and Grids' workset if it is found.</value>
+  </data>
+</root>
