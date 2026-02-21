@@ -135,5 +135,10 @@ namespace IBIMCA.Forms.Bases
         }
 
         #endregion
+
+        private void labelTooltip_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

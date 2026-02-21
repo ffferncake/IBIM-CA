@@ -186,9 +186,7 @@ The tool will apply a generic naming rule to exported documents. The built-in Pd
 Shift + click:
 Shows crop boundaries (hidden by default).</value>
   </data>
-  <data name="General_About" xml:space="preserve">
-    <value>Takes you to the project's github.</value>
-  </data>
+
   <data name="Import" xml:space="preserve">
     <value>Tools relating to importing information to Revit.</value>
   </data>
@@ -267,21 +265,11 @@ Condition(s) to run:
 Condition(s) to run:
 - Elements are selected</value>
   </data>
-  <data name="Settings" xml:space="preserve">
+	
+  <data name="Settings_Warden" xml:space="preserve">
     <value>This menu contains various tools to toggle IBIMCA's features.</value>
   </data>
-  <data name="Settings_ColourTabs" xml:space="preserve">
-    <value>Toggles the colouring of view tabs by document.
-
-Note:
-Tab colouring will override default Revit tab colouring behavior. Whilst this setting can be disabled afterwards, you will need to restart Revit to reinstate default tab colouring afterwards.</value>
-  </data>
-  <data name="Settings_UiToggle" xml:space="preserve">
-    <value>Toggles between light and dark mode.
-
-Shift + Click:
-Sets the canvas theme to Dark instead of light.</value>
-  </data>
+  
   <data name="Settings_Warden" xml:space="preserve">
     <value>Toggles the Warden feature.
 

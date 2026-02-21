@@ -1,0 +1,52 @@
+﻿<Window x:Class="IBIMCA.UI.StandardEvaluationSettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="BF 인증 설정"
+        Height="520" Width="760"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Tabs -->
+        <TabControl Grid.Row="0">
+            <TabItem Header="프로젝트 정보">
+                <Grid Margin="10">
+                    <TextBlock Text="프로젝트 정보 (TODO)" VerticalAlignment="Top"/>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="정성적 평가 설정">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <!-- Simple table-like list -->
+                    <DataGrid ItemsSource="{Binding Items}"
+                              AutoGenerateColumns="False"
+                              CanUserAddRows="False"
+                              CanUserDeleteRows="False"
+                              HeadersVisibility="Column"
+                              GridLinesVisibility="Horizontal"
+                              IsReadOnly="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="유형" Binding="{Binding Category}" Width="160" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="속성" Binding="{Binding Name}" Width="*" IsReadOnly="True"/>
+                            <DataGridCheckBoxColumn Header="" Binding="{Binding IsEnabled}" Width="60"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+        <!-- Buttons -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+            <Button Content="저장" Width="90" Margin="0,0,8,0" Click="OnSave"/>
+            <Button Content="닫기" Width="90" Click="OnClose"/>
+        </StackPanel>
+    </Grid>
+</Window>

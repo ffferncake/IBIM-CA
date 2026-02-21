@@ -1,311 +1,223 @@
 ﻿// Revit API
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Events;
+
 // IBIMCA
 using IBIMCA.Extensions;
 using gAva = IBIMCA.Availability.AvailabilityNames;
-using gRib = IBIMCA.Utilities.Ribbon_Utils;
+using IBIMCA.Utilities; // IconLoader
 
-// The class belongs to the IBIMCA namespace
 namespace IBIMCA
 {
-    /// <summary>
-    /// This interface handles startup and shutdown of the application.
-    /// </summary>
     public class Application : IExternalApplication
     {
-        #region Class properties
-
-        // Temporary variable to pass the UI controlled app to an idling event
         private static UIControlledApplication _uiCtlApp;
 
-        // Ribbon construction constants
-        public const string PANEL1_NAME = "General";
-        public const string PANEL2_NAME = "Tools";
-        public const string PANELD_NAME = "DEBUG";
+        private static PushButton AddPulldownItem (
+            PulldownButton parent,
+            string internalName,
+            string text,
+            Type commandType,
+            string icon16,
+            string icon32
+         )
 
-        #endregion
+        {
+            var pbd = new PushButtonData(
+                internalName,
+                text,
+                Globals.AssemblyPath,
+                commandType.FullName
+            );
 
-        /// <summary>
-        /// Runs when the application starts.
-        /// We use this part of the interface to initialize IBIMCA.
-        /// </summary>
+            var btn = parent.AddPushButton(pbd) as PushButton;
+
+            btn.Image = IconLoader.LoadPng("Icons16", icon16);
+            btn.LargeImage = IconLoader.LoadPng("Icons32", icon32);
+
+            return btn;
+        }
+
         public Result OnStartup(UIControlledApplication uiCtlApp)
         {
-            #region Register UiApp
-
-            // Set private variable
             _uiCtlApp = uiCtlApp;
 
-            // Try to subscribe to the idling event, which sets uiApp global ASAP
-            try
-            {
-                _uiCtlApp.Idling += OnIdling;
-            }
-            catch
-            {
-                Globals.UiApp = null;
-            }
+            try { _uiCtlApp.Idling += OnIdling; }
+            catch { Globals.UiApp = null; }
 
-            #endregion
-
-            #region Register Globals and Automations
-
-            // Store all other global variables and tooltips
             Globals.RegisterVariables(uiCtlApp);
             Globals.RegisterTooltips($"{Globals.AddinName}.Resources.Files.Tooltips");
 
-            // Register the warden commands
             Warden.Register(uiCtlApp);
-
-            // Register the sync timer
             SyncTimer.Register(uiCtlApp.ControlledApplication);
 
-            #endregion
-
-            #region Construct Panel 1
-
-            /// <summary>
-            /// We will load our commands here later on.
-            /// </summary>
-
-            // Create the tab
+            // TAB
             uiCtlApp.Ext_AddRibbonTab(Globals.AddinName);
 
-            // Add Panel1 to the tab
-            var ribbonPanel1 = uiCtlApp.Ext_AddRibbonPanelToTab(Globals.AddinName, PANEL1_NAME);
+            // =========================
+            // Panel 1: 1. 프로젝트 설정
+            // =========================
+            var p1 = uiCtlApp.Ext_AddRibbonPanelToTab(Globals.AddinName, "1. 프로젝트 설정");
 
-            // Panel 1 - Add Cmd_About button
-            ribbonPanel1.Ext_AddPushButton<IBIMCA.Cmds_General.Cmd_About>(
-                buttonName: "About", availability: gAva.ZeroDoc);
+            // Instead of AddButton(...) for CertificationToolset:
+            var pdData = new PulldownButtonData("CertificationToolset", "설계인증\n평가 로드");
+            var pd = p1.AddItem(pdData) as PulldownButton;
 
-            // Panel 1 - Add separator
-            ribbonPanel1.AddSeparator();
+            // set icon for the dropdown button itself
+            pd.Image = IconLoader.LoadPng("Icons16", "CertificationToolset16.png");
+            pd.LargeImage = IconLoader.LoadPng("Icons32", "CertificationToolset32.png");
 
-            // Panel 1 - Add Settings pulldown
-            var pullDownSettings = ribbonPanel1.Ext_AddPulldownButton(
-                buttonName: "Settings",
-                nameSpace: "IBIMCA.Cmds_Settings");
+            // add 3 items inside dropdown
+            NewMethod(pd);
 
-            // Panel 1 - Add Cmd_Warden button to Settings pulldown
-            pullDownSettings.Ext_AddPushButton<IBIMCA.Cmds_Settings.Cmd_Warden>(
-                buttonName: "Warden", availability: gAva.Document);
+            AddPulldownItem(pd,
+                internalName: "LoadGSEED",
+                text: "녹색건축 인증제도\n(G-SEED)",
+                commandType: typeof(IBIMCA.Commands.General.Cmd_LoadCertification_GSEED),
+                icon16: "GSEED16.png",
+                icon32: "GSEED32.png"
+            );
 
-            // Panel 1 - Add Cmd_ColourTabs button to Settings pulldown
-            pullDownSettings.Ext_AddPushButton<IBIMCA.Cmds_Settings.Cmd_ColourTabs>(
-                buttonName: "Coloured Tabs",
-                availability: gAva.Document);
+            AddPulldownItem(pd,
+                internalName: "LoadCPTED",
+                text: "범죄예방환경설계\n(CPTED)",
+                commandType: typeof(IBIMCA.Commands.General.Cmd_LoadCertification_CPTED),
+                icon16: "CPTED16.png",
+                icon32: "CPTED32.png"
+            );
 
-            // Panel 1 - Add Cmd_UiToggle button to Settings pulldown
-            gRib.AddButton_UiToggle<IBIMCA.Cmds_Settings.Cmd_UiToggle>(
-                pulldownButton: pullDownSettings, availability: gAva.ZeroDoc);
+            var b2 = AddButton(p1,
+                internalName: "StandardEvaluation",
+                text: "정성적 평가\n설정",
+                commandType: typeof(IBIMCA.Commands.General.Cmd_StandardEvaluationSettings),
+                availability: gAva.Document,
+                iconBaseName: "StandardEvaluation");
 
-            #endregion
+            // =========================
+            // Panel 2: 2. 자동화 평가
+            // =========================
+            var p2 = uiCtlApp.Ext_AddRibbonPanelToTab(Globals.AddinName, "2. 자동화 평가");
 
-            #region Construct Panel 2
+            var b3 = AddButton(p2,
+                internalName: "OpenEvaluationPanel",
+                text: "평가 패널\n열기",
+                commandType: typeof(IBIMCA.Commands.Tools.Cmd_OpenEvaluationPanel),
+                availability: gAva.Document,
+                iconBaseName: "OpenEvaluationPanel");
 
-            // Add Panel2 to the tab
-            var ribbonPanel2 = uiCtlApp.Ext_AddRibbonPanelToTab(Globals.AddinName, PANEL2_NAME);
+            var b4 = AddButton(p2,
+                internalName: "RunFullEvaluation",
+                text: "전체 평가\n실행",
+                commandType: typeof(IBIMCA.Commands.Tools.Cmd_RunFullEvaluation),
+                availability: gAva.Document,
+                iconBaseName: "RunFullEvaluation");
 
-            #region Construct PulldownButton data
+            // =========================
+            // Panel 3: 3. 지능형 지원
+            // =========================
+            var p3 = uiCtlApp.Ext_AddRibbonPanelToTab(Globals.AddinName, "3. 지능형 지원");
 
-            // Construct pulldown data objects
-            var dataAudit = gRib.NewPulldownButtonData(
-                buttonName: "Audit",
-                nameSpace: "IBIMCA.Cmds_Audit");
+            var b5 = AddButton(p3,
+                internalName: "AIAssistant",
+                text: "AI 챗봇\n어시스턴트",
+                commandType: typeof(IBIMCA.Commands.Tools.Cmd_AIAssistant),
+                availability: gAva.Document,
+                iconBaseName: "AIAssistant");
 
-            var dataRevision = gRib.NewPulldownButtonData(
-                buttonName: "Revision",
-                nameSpace: "IBIMCA.Cmds_Revision");
+            var b6 = AddButton(p3,
+                internalName: "UpdateExternalDB",
+                text: "외부 DB\n자동 갱신",
+                commandType: typeof(IBIMCA.Commands.Tools.Cmd_UpdateExternalDB),
+                availability: gAva.Document,
+                iconBaseName: "UpdateExternalDB");
 
-            var dataSelect = gRib.NewPulldownButtonData(
-                buttonName: "Select",
-                nameSpace: "IBIMCA.Cmds_Select");
+            var b7 = AddButton(p3,
+                internalName: "AutoDesignCorrection",
+                text: "설계 대안\n자동수정",
+                commandType: typeof(IBIMCA.Commands.Tools.Cmd_AutoDesignCorrection),
+                availability: gAva.Document,
+                iconBaseName: "AutoDesignCorrection");
 
-            var dataWorkset = gRib.NewPulldownButtonData(
-                buttonName: "Workset",
-                nameSpace: "IBIMCA.Cmds_Workset");
+            // =========================
+            // Panel 4: 4. 시각화 및 리포팅
+            // =========================
+            var p4 = uiCtlApp.Ext_AddRibbonPanelToTab(Globals.AddinName, "4. 시각화 및 리포팅");
 
-            var dataImport = gRib.NewPulldownButtonData(
-                buttonName: "Import_test",
-                nameSpace: "IBIMCA.Cmds_Import");
+            var b8 = AddButton(p4,
+                internalName: "ResultColorVisualization",
+                text: "결과 색상\n가시화",
+                commandType: typeof(IBIMCA.Commands.Tools.Cmd_ResultColorVisualization),
+                availability: gAva.Document,
+                iconBaseName: "ResultColorVisualization");
 
-            var dataExport = gRib.NewPulldownButtonData(
-                buttonName: "Export",
-                nameSpace: "IBIMCA.Cmds_Export");
+            var b9 = AddButton(p4,
+                internalName: "ExportExcelReport",
+                text: "엑셀 보고서\n출력",
+                commandType: typeof(IBIMCA.Commands.Tools.Cmd_ExportExcelReport),
+                availability: gAva.Document,
+                iconBaseName: "ExportExcelReport");
 
-            #endregion
-
-            #region Stack pulldowns
-
-            // Construct stacks
-            var stackedGroup2a = ribbonPanel2.AddStackedItems(dataAudit, dataRevision, dataSelect);
-            var stackedGroup2b = ribbonPanel2.AddStackedItems(dataWorkset, dataImport, dataExport);
-
-            // Retrieve pulldownbuttons
-            var pulldownAudit = (PulldownButton)stackedGroup2a[0];
-            var pulldownRevision = (PulldownButton)stackedGroup2a[1];
-            var pulldownSelect = (PulldownButton)stackedGroup2a[2];
-            var pulldownWorkset = (PulldownButton)stackedGroup2b[0];
-            var pulldownImport = (PulldownButton)stackedGroup2b[1];
-            var pulldownExport = (PulldownButton)stackedGroup2b[2];
-
-            #endregion
-
-            #region Pulldown - Audit
-
-            // Add pushbuttons to Audit
-            pulldownAudit.Ext_AddPushButton<IBIMCA.Cmds_Audit.Cmd_DeletePatterns>(
-                buttonName: "Delete imported patterns", availability: gAva.Document);
-
-            pulldownAudit.AddSeparator();
-
-            pulldownAudit.Ext_AddPushButton<IBIMCA.Cmds_Audit.Cmd_PurgeRooms>(
-                buttonName: "Purge unplaced rooms", availability: gAva.Project);
-            
-            pulldownAudit.Ext_AddPushButton<IBIMCA.Cmds_Audit.Cmd_PurgeTemplates>(
-                buttonName: "Purge unused view templates", availability: gAva.Document);
-            
-            pulldownAudit.Ext_AddPushButton<IBIMCA.Cmds_Audit.Cmd_PurgeFilters>(
-                buttonName: "Purge unused view filters", availability: gAva.Document);
-
-            #endregion
-
-            #region Pulldown - Revision
-
-            // Add pushbuttons to Revision
-            pulldownRevision.Ext_AddPushButton<IBIMCA.Cmds_Revision.Cmd_BulkRev>(
-                buttonName: "Bulk revision", availability: gAva.Document);
-
-            pulldownRevision.Ext_AddPushButton<IBIMCA.Cmds_Revision.Cmd_RevSet>(
-                buttonName: "Sheet set by revision", availability: gAva.Document);
-
-            pulldownRevision.Ext_AddPushButton<IBIMCA.Cmds_Revision.Cmd_DocTrans>(
-                buttonName: "Create Excel transmittal", availability: gAva.Document);
-
-            #endregion
-
-            #region Pulldown - Select
-
-            // Add pushbuttons to Select
-            pulldownSelect.Ext_AddPushButton<IBIMCA.Cmds_Select.Cmd_PickRooms>(
-                buttonName: "Pick rooms", availability: gAva.Document);
-
-            pulldownSelect.Ext_AddPushButton<IBIMCA.Cmds_Select.Cmd_PickWalls>(
-                buttonName: "Pick walls", availability: gAva.Document);
-
-            pulldownSelect.AddSeparator();
-
-            pulldownSelect.Ext_AddPushButton<IBIMCA.Cmds_Select.Cmd_GetHidden>(
-                buttonName: "Get hidden elements", availability: gAva.Document);
-
-            pulldownSelect.Ext_AddPushButton<IBIMCA.Cmds_Select.Cmd_GetTtbs>(
-                buttonName: "Get sheet titleblocks", availability: gAva.SelectionOnlySheets);
-
-            pulldownSelect.AddSeparator();
-
-            pulldownSelect.Ext_AddPushButton<IBIMCA.Cmds_Select.Cmd_RemoveGrouped>(
-                buttonName: "Remove grouped elements", availability: gAva.Selection);
-
-            #endregion
-
-            #region Pulldown - Workset
-
-            // Add pushbuttons to Workset
-            pulldownWorkset.Ext_AddPushButton<IBIMCA.Cmds_Workset.Cmd_Create>(
-                buttonName: "Create worksets", availability: gAva.Workshared);
-
-            #endregion
-
-            #region Pulldown - Import
-
-            // Add pushbuttons to Import
-            pulldownImport.Ext_AddPushButton<IBIMCA.Cmds_Import.Cmd_SheetsExcel>(
-                buttonName: "Sheets to Excel", availability: gAva.Project);
-
-            pulldownImport.AddSeparator();
-
-            pulldownImport.Ext_AddPushButton<IBIMCA.Cmds_Import.Cmd_CreateSheets>(
-                buttonName: "Create/update sheets", availability: gAva.Project);
-
-            #endregion
-
-            #region Pulldown - Export
-
-            // Add pushbuttons to Export
-            pulldownExport.Ext_AddPushButton<IBIMCA.Cmds_Export.Cmd_Schedule>(
-                buttonName: "Schedule to Excel", availability: gAva.ActiveViewSchedule);
-
-            pulldownExport.AddSeparator();
-
-            pulldownExport.Ext_AddPushButton<IBIMCA.Cmds_Export.Cmd_SheetsPdf>(
-                buttonName: "Sheets to Pdf", availability: gAva.Project);
-
-            pulldownExport.Ext_AddPushButton<IBIMCA.Cmds_Export.Cmd_SheetsDwg>(
-                buttonName: "Sheets to Dwg", availability: gAva.Project);
-
-            #endregion
-
-            #endregion
-
-            #region Panel Debug
-
-            // Only add the Debug panel when in debug mode
-#if DEBUG
-            var ribbonPanelDebug = uiCtlApp.Ext_AddRibbonPanelToTab(Globals.AddinName, PANELD_NAME);
-            ribbonPanelDebug.Ext_AddPushButton<Cmds_Testing.Cmd_TestGeneral>("Test", gAva.Project);
-            ribbonPanelDebug.Ext_AddPushButton<Cmds_Testing.Cmd_TestMvvm>("Mvvm", gAva.Project);
-#endif
-            #endregion
-
-            // Return succeeded
             return Result.Succeeded;
         }
 
-        /// <summary>
-        /// Runs when the application closes down.
-        /// We use this part of the interface to cleanup IBIMCA.
-        /// </summary>
+        private static void NewMethod(PulldownButton pd)
+        {
+            AddPulldownItem(pd,
+                            internalName: "LoadBF",
+                            text: "장애물 없는 생활환경 인증제도\n(BF)",
+                            commandType: typeof(IBIMCA.Commands.General.Cmd_LoadCertification_BF),
+                            icon16: "BF16.png",
+                            icon32: "BF32.png"
+                        );
+        }
+
+        private static PushButton AddButton(
+            RibbonPanel panel,
+            string internalName,
+            string text,
+            System.Type commandType,
+            string availability,
+            string iconBaseName
+        )
+        {
+            // PushButtonData 생성
+            var pbd = new PushButtonData(
+                internalName,
+                text,
+                Globals.AssemblyPath,               // Globals에 assembly path 있어야 함 (기존 코드에 보통 있음)
+                commandType.FullName
+            );
+
+            var btn = panel.AddItem(pbd) as PushButton;
+
+            // Availability class 설정 (너희 Ext 메서드로 하고 있으면 그 방식에 맞추면 됨)
+            // 여기서는 단순 예시. 기존 Ext_AddPushButton 방식 유지하고 싶으면 그걸로 바꿔도 돼.
+            btn.AvailabilityClassName = availability;
+
+            // 아이콘 적용
+            btn.Image = IconLoader.LoadPng("Icons16", $"{iconBaseName}16.png");
+            btn.LargeImage = IconLoader.LoadPng("Icons32", $"{iconBaseName}32.png");
+
+            return btn;
+        }
+
         public Result OnShutdown(UIControlledApplication uiCtlApp)
         {
-            #region Unsubscribe from events
-
-            // Deregister coloured tabs
             ColouredTabs.DeRegister(uiCtlApp.ControlledApplication, Globals.UiApp);
-
-            // Deregister Warden
             Warden.DeRegister(uiCtlApp);
-
-            // Deregister SyncTimer
             SyncTimer.DeRegister(uiCtlApp.ControlledApplication);
-
-            #endregion
-
-            // Return succeeded
             return Result.Succeeded;
         }
 
-        #region Register UiApp on Idling
-
-        /// <summary>
-        /// Registers the uiApp global whenever first possible.
-        /// </summary>
-        /// <param name="sender"">The event sender object (the uiApp).</param>
-        /// <param name="e"">The idling event arguments, unused.</param>
-        /// <returns>Void (nothing).</returns>
         private void OnIdling(object sender, IdlingEventArgs e)
         {
-            // Unsubscribe from the event (only runs once)
             _uiCtlApp.Idling -= OnIdling;
 
-            // Register if possible (will generally be)
             if (sender is UIApplication uiApp)
             {
                 Globals.UiApp = uiApp;
                 Globals.UsernameRevit = uiApp.Application.Username;
             }
         }
-
-        #endregion
     }
 }
