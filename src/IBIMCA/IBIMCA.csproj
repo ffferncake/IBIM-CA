@@ -62,6 +62,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Reference Include="RevitUIAPI">
+        <HintPath>..\..\..\..\..\..\..\Program Files\Autodesk\Revit 2025\RevitUIAPI.dll</HintPath>
+      </Reference>
       <Reference Include="Xceed.Wpf.AvalonDock">
         <HintPath>C:\Program Files\Autodesk\Revit $(RevitVersion)\Xceed.Wpf.AvalonDock.dll</HintPath>
       </Reference>

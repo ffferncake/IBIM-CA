@@ -13,13 +13,14 @@ namespace IBIMCA
     {
         private static UIControlledApplication _uiCtlApp;
 
-        private static PushButton AddPulldownItem (
+        private static PushButton AddPulldownItem(
             PulldownButton parent,
             string internalName,
             string text,
             Type commandType,
             string icon16,
-            string icon32
+            string icon32,
+            string availability = null
          )
 
         {
@@ -32,6 +33,9 @@ namespace IBIMCA
 
             var btn = parent.AddPushButton(pbd) as PushButton;
 
+            if (!string.IsNullOrWhiteSpace(availability))
+                btn.AvailabilityClassName = availability;
+
             btn.Image = IconLoader.LoadPng("Icons16", icon16);
             btn.LargeImage = IconLoader.LoadPng("Icons32", icon32);
 
@@ -41,6 +45,12 @@ namespace IBIMCA
         public Result OnStartup(UIControlledApplication uiCtlApp)
         {
             _uiCtlApp = uiCtlApp;
+
+            uiCtlApp.RegisterDockablePane(
+                IBIMCA.UI.EvaluationPanelProvider.PaneId,
+                "평가 패널",
+                new IBIMCA.UI.EvaluationPanelProvider()
+            );
 
             try { _uiCtlApp.Idling += OnIdling; }
             catch { Globals.UiApp = null; }
@@ -98,12 +108,37 @@ namespace IBIMCA
             // =========================
             var p2 = uiCtlApp.Ext_AddRibbonPanelToTab(Globals.AddinName, "2. 자동화 평가");
 
-            var b3 = AddButton(p2,
-                internalName: "OpenEvaluationPanel",
-                text: "평가 패널\n열기",
+            var evalPanelData = new PulldownButtonData("OpenEvaluationPanelToolset", "평가 패널\n열기");
+            var evalPanelPulldown = p2.AddItem(evalPanelData) as PulldownButton;
+            evalPanelPulldown.Image = IconLoader.LoadPng("Icons16", "OpenEvaluationPanel16.png");
+            evalPanelPulldown.LargeImage = IconLoader.LoadPng("Icons32", "OpenEvaluationPanel32.png");
+
+            AddPulldownItem(evalPanelPulldown,
+                internalName: "OpenEvaluationPanelBF",
+                text: "장애물 없는 생활환경\n(BF)",
                 commandType: typeof(IBIMCA.Commands.Tools.Cmd_OpenEvaluationPanel),
-                availability: gAva.Document,
-                iconBaseName: "OpenEvaluationPanel");
+                icon16: "BF16.png",
+                icon32: "BF32.png",
+                availability: gAva.Document
+            );
+
+            AddPulldownItem(evalPanelPulldown,
+                internalName: "OpenEvaluationPanelGSEED",
+                text: "녹색건축 인증제도\n(G-SEED)",
+                commandType: typeof(IBIMCA.Commands.Tools.Cmd_OpenEvaluationPanel_GSEED),
+                icon16: "GSEED16.png",
+                icon32: "GSEED32.png",
+                availability: gAva.Document
+            );
+
+            AddPulldownItem(evalPanelPulldown,
+                internalName: "OpenEvaluationPanelCPTED",
+                text: "범죄예방환경설계\n(CPTED)",
+                commandType: typeof(IBIMCA.Commands.Tools.Cmd_OpenEvaluationPanel_CPTED),
+                icon16: "CPTED16.png",
+                icon32: "CPTED32.png",
+                availability: gAva.Document
+            );
 
             var b4 = AddButton(p2,
                 internalName: "RunFullEvaluation",
@@ -133,7 +168,7 @@ namespace IBIMCA
 
             var b7 = AddButton(p3,
                 internalName: "AutoDesignCorrection",
-                text: "설계 대안\n자동수정",
+                text: "설계 대안\n수정 제안",
                 commandType: typeof(IBIMCA.Commands.Tools.Cmd_AutoDesignCorrection),
                 availability: gAva.Document,
                 iconBaseName: "AutoDesignCorrection");

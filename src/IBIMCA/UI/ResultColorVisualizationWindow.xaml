@@ -1,0 +1,175 @@
+﻿<Window x:Class="IBIMCA.UI.ResultColorVisualizationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="평가 결과 색상 가시화"
+        Height="480" Width="520"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize">
+
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Background="#F3F3F3" Padding="10" BorderBrush="#BFBFBF" BorderThickness="1">
+            <DockPanel>
+                <TextBlock Text="평가 결과 색상 가시화"
+                           FontWeight="SemiBold"
+                           VerticalAlignment="Center"/>
+
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Width="28" Height="26" Margin="8,0,0,0" Content="◀" ToolTip="뒤로"/>
+                    <Button Width="28" Height="26" Margin="6,0,0,0" Content="X" ToolTip="닫기" Click="OnClose"/>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <!-- 평가항목 선택 -->
+        <GroupBox Grid.Row="1" Header="평가항목 선택" Margin="0,12,0,0">
+            <Grid Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="90"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBox Grid.Column="0" Height="30"
+                         VerticalContentAlignment="Center"
+                         Text="{Binding EvaluationItem, UpdateSourceTrigger=PropertyChanged}"
+                         ToolTip="평가항목"/>
+
+                <Button Grid.Column="1" Height="30" Margin="10,0,0,0"
+                        Content="....."
+                        Command="{Binding PickEvaluationItemCommand}"/>
+            </Grid>
+        </GroupBox>
+
+        <!-- 최우수 -->
+        <GroupBox Grid.Row="2" Header="평가 등급별 가시화 (최우수)" Margin="0,12,0,0">
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="46"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- 패턴 -->
+                <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="패턴:"/>
+                <ComboBox Grid.Row="0" Grid.Column="1" Height="26"
+                          ItemsSource="{Binding PatternOptions}"
+                          SelectedItem="{Binding BestPattern}"/>
+                <Button Grid.Row="0" Grid.Column="2" Height="26" Margin="8,0,0,0"
+                        Content="..."
+                        Command="{Binding PickBestPatternCommand}"/>
+
+                <!-- 색상 -->
+                <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="색상:" Margin="0,8,0,0"/>
+                <Grid Grid.Row="1" Grid.Column="1" Margin="0,8,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="26"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Border Grid.Column="0" Width="20" Height="16"
+                            BorderBrush="Black" BorderThickness="1"
+                            Background="{Binding BestColorBrush}"
+                            VerticalAlignment="Center"/>
+                    <TextBox Grid.Column="1" Height="26" Margin="8,0,0,0"
+                             VerticalContentAlignment="Center"
+                             Text="{Binding BestColorText}"
+                             IsReadOnly="True"/>
+                </Grid>
+
+                <!-- 두께 -->
+                <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Text="두께:" Margin="0,8,0,0"/>
+                <ComboBox Grid.Row="2" Grid.Column="1" Height="26" Margin="0,8,0,0"
+                          ItemsSource="{Binding WeightOptions}"
+                          SelectedItem="{Binding BestWeight}"/>
+            </Grid>
+        </GroupBox>
+
+        <!-- 우수 -->
+        <GroupBox Grid.Row="3" Header="평가 등급별 가시화 (우수)" Margin="0,12,0,0">
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="46"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- 패턴 -->
+                <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="패턴:"/>
+                <ComboBox Grid.Row="0" Grid.Column="1" Height="26"
+                          ItemsSource="{Binding PatternOptions}"
+                          SelectedItem="{Binding GoodPattern}"/>
+                <Button Grid.Row="0" Grid.Column="2" Height="26" Margin="8,0,0,0"
+                        Content="..."
+                        Command="{Binding PickGoodPatternCommand}"/>
+
+                <!-- 색상 -->
+                <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="색상:" Margin="0,8,0,0"/>
+                <Grid Grid.Row="1" Grid.Column="1" Margin="0,8,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="26"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Border Grid.Column="0" Width="20" Height="16"
+                            BorderBrush="Black" BorderThickness="1"
+                            Background="{Binding GoodColorBrush}"
+                            VerticalAlignment="Center"/>
+                    <TextBox Grid.Column="1" Height="26" Margin="8,0,0,0"
+                             VerticalContentAlignment="Center"
+                             Text="{Binding GoodColorText}"
+                             IsReadOnly="True"/>
+                </Grid>
+
+                <!-- 두께 -->
+                <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Text="두께:" Margin="0,8,0,0"/>
+                <ComboBox Grid.Row="2" Grid.Column="1" Height="26" Margin="0,8,0,0"
+                          ItemsSource="{Binding WeightOptions}"
+                          SelectedItem="{Binding GoodWeight}"/>
+            </Grid>
+        </GroupBox>
+
+        <!-- Spacer -->
+        <Border Grid.Row="4"/>
+
+        <!-- Bottom buttons -->
+        <Grid Grid.Row="5" Margin="0,14,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0" Width="44" Height="34" Content="◀" ToolTip="뒤로"/>
+
+            <Button Grid.Column="2" Width="110" Height="34" Margin="0,0,10,0"
+                    Content="되돌리기" Command="{Binding RevertCommand}"/>
+
+            <Button Grid.Column="3" Width="90" Height="34" Margin="0,0,10,0"
+                    Content="적용" Command="{Binding ApplyCommand}"/>
+
+            <Button Grid.Column="4" Width="90" Height="34"
+                    Content="완료" Command="{Binding FinishCommand}"/>
+        </Grid>
+    </Grid>
+</Window>

@@ -1,0 +1,556 @@
+<Window x:Class="IBIMCA.UI.CptedCertificationOverviewWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Intelligent BIM - Certification Automation"
+        Height="600"
+        Width="960"
+        MinHeight="560"
+        MinWidth="900"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="CanResize"
+        Background="#F7F9FC"
+        FontFamily="Malgun Gothic">
+
+    <Window.Resources>
+        <Style x:Key="CardBorderStyle" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#D8DEE8"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Padding" Value="12"/>
+        </Style>
+
+        <Style x:Key="SectionTitleStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#202938"/>
+            <Setter Property="Margin" Value="0,0,0,8"/>
+        </Style>
+
+        <Style x:Key="NavButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="Margin" Value="8,3"/>
+            <Setter Property="Padding" Value="10,0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#24364B"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="4">
+                            <ContentPresenter Margin="{TemplateBinding Padding}"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#EEF5FF"/>
+                    <Setter Property="BorderBrush" Value="#BBD4F6"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="SelectedNavButtonStyle" TargetType="Button" BasedOn="{StaticResource NavButtonStyle}">
+            <Setter Property="Background" Value="#E8F2FF"/>
+            <Setter Property="BorderBrush" Value="#9FC6F6"/>
+            <Setter Property="Foreground" Value="#1459A6"/>
+        </Style>
+
+        <Style x:Key="ActionButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="Margin" Value="0,0,10,0"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#8FB4E8"/>
+            <Setter Property="Foreground" Value="#1C579B"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#F3F8FF"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="TinyHeaderStyle" TargetType="Border">
+            <Setter Property="Background" Value="#F1F4F8"/>
+            <Setter Property="BorderBrush" Value="#D7DEE8"/>
+            <Setter Property="BorderThickness" Value="0,0,1,1"/>
+            <Setter Property="Padding" Value="6,4"/>
+        </Style>
+
+        <Style x:Key="TinyCellStyle" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#E1E6EF"/>
+            <Setter Property="BorderThickness" Value="0,0,1,1"/>
+            <Setter Property="Padding" Value="6,4"/>
+        </Style>
+
+        <Style x:Key="EvaluationTileStyle" TargetType="Border">
+            <Setter Property="Background" Value="#F8FBFF"/>
+            <Setter Property="BorderBrush" Value="#E1EAF7"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="Margin" Value="0,0,8,8"/>
+        </Style>
+
+        <Style x:Key="EvaluationIconStyle" TargetType="TextBlock">
+            <Setter Property="Width" Value="32"/>
+            <Setter Property="FontSize" Value="21"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#1459A6"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="EvaluationLabelStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#263548"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="GuideLabelStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#1459A6"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+        </Style>
+
+        <Style x:Key="GuideTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="#334155"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="LineHeight" Value="18"/>
+        </Style>
+
+        <Style x:Key="ParameterKeyStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#1E293B"/>
+        </Style>
+
+        <Style x:Key="ParameterTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Foreground" Value="#475569"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Background="#0F4F93" BorderThickness="0">
+            <TextBlock Text="Intelligent BIM - Certification Automation"
+                       Foreground="White"
+                       VerticalAlignment="Center"
+                       Margin="10,0"
+                       FontSize="12"
+                       FontWeight="SemiBold"/>
+        </Border>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="190"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0"
+                    Background="#FBFCFE"
+                    BorderBrush="#DCE3EC"
+                    BorderThickness="0,0,1,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" Margin="14,14,10,12">
+                        <TextBlock Text="⬟"
+                                   FontSize="28"
+                                   Foreground="#1459A6"
+                                   Margin="0,0,0,4"/>
+                        <TextBlock Text="범죄예방환경설계"
+                                   FontWeight="SemiBold"
+                                   Foreground="#334155"/>
+                        <TextBlock Text="(CPTED)"
+                                   FontWeight="SemiBold"
+                                   Foreground="#334155"
+                                   Margin="0,2,0,0"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="1">
+                        <Button Style="{StaticResource SelectedNavButtonStyle}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="⌂" FontSize="16" Width="24"/>
+                                <TextBlock Text="인증 개요"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Style="{StaticResource NavButtonStyle}" Click="OnGuideLink">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="🔗" FontSize="14" Width="24"/>
+                                <TextBlock Text="설계인증 가이드 링크"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Style="{StaticResource NavButtonStyle}" Click="OnBimModelGuide">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="□" FontSize="16" Width="24"/>
+                                <TextBlock Text="BIM 모델링 가이드"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Style="{StaticResource NavButtonStyle}" Click="OnEvaluationItems">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="☷" FontSize="16" Width="24"/>
+                                <TextBlock Text="주요 평가영역"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Style="{StaticResource NavButtonStyle}" Click="OnLinkedData">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="▤" FontSize="16" Width="24"/>
+                                <TextBlock Text="개발 연계 데이터"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="2" Margin="12,0,12,12">
+                        <Separator Margin="0,0,0,8"/>
+                        <Button Style="{StaticResource NavButtonStyle}" Height="30" Click="OnSettings">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="⚙" Width="24"/>
+                                <TextBlock Text="설정"/>
+                            </StackPanel>
+                        </Button>
+                        <TextBlock Text="버전 1.0.0"
+                                   Foreground="#7A8698"
+                                   FontSize="11"
+                                   Margin="10,2,0,0"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <Grid Grid.Column="1" Margin="14,12,14,12">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0"
+                           Text="범죄예방환경설계 (CPTED) 인증제도"
+                           FontSize="18"
+                           FontWeight="SemiBold"
+                           Foreground="#1E293B"
+                           Margin="0,0,0,10"/>
+
+                <Border Grid.Row="1" Style="{StaticResource CardBorderStyle}" Margin="0,0,0,10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="54"/>
+                            <ColumnDefinition Width="90"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0"
+                                Width="38"
+                                Height="38"
+                                CornerRadius="19"
+                                Background="#E8F2FF"
+                                BorderThickness="0"
+                                VerticalAlignment="Top"
+                                HorizontalAlignment="Center">
+                            <TextBlock Text="i"
+                                       FontSize="24"
+                                       FontWeight="Bold"
+                                       Foreground="#1459A6"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"/>
+                        </Border>
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Text="제도 소개" FontWeight="Bold" Foreground="#1459A6" Margin="0,0,0,8"/>
+                            <TextBlock Text="목적" FontWeight="Bold" Foreground="#1459A6" Margin="0,0,0,8"/>
+                            <TextBlock Text="대상 시설" FontWeight="Bold" Foreground="#1459A6" Margin="0,0,0,8"/>
+                            <TextBlock Text="활용" FontWeight="Bold" Foreground="#1459A6"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="Crime Prevention Through Environmental Design의 약자로, 건축적·환경적 설계를 통해 범죄 발생 기회를 사전에 차단하고 안전한 환경을 조성하기 위한 인증제도입니다."
+                                       TextWrapping="Wrap" Margin="0,0,0,8"/>
+                            <TextBlock Text="범죄 위험을 최소화하고 사용자의 안전과 심리적 안정감을 높이는 환경을 구현합니다."
+                                       TextWrapping="Wrap" Margin="0,0,0,8"/>
+                            <TextBlock Text="공동주택, 학교, 공공시설, 상업시설, 공원·녹지, 교통시설 등 다양한 건축물 및 외부공간"
+                                       TextWrapping="Wrap" Margin="0,0,0,8"/>
+                            <TextBlock Text="설계 단계에서 CPTED 원칙을 반영하여 안전한 공간계획을 지원하고, 인증 및 심사 과정에서 객관적 검토를 제공합니다."
+                                       TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <Grid Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" Style="{StaticResource ActionButtonStyle}" Click="OnOpenWebsite">
+                            <TextBlock Text="🌐  공식 안내" TextAlignment="Center"/>
+                        </Button>
+                        <Button Grid.Column="1" Style="{StaticResource ActionButtonStyle}" BorderBrush="#E49D9D" Foreground="#B63535" Click="OnOpenPdf">
+                            <TextBlock Text="▣  평가기준 PDF" TextAlignment="Center"/>
+                        </Button>
+                        <Button Grid.Column="2" Style="{StaticResource ActionButtonStyle}" BorderBrush="#92C79A" Foreground="#2E7D3F" Click="OnChecklist">
+                            <TextBlock Text="☑  체크리스트" TextAlignment="Center"/>
+                        </Button>
+                        <Button Grid.Column="3" Style="{StaticResource ActionButtonStyle}" BorderBrush="#B99AE8" Foreground="#6A3DB3" Margin="0" Click="OnFaq">
+                            <TextBlock Text="?  FAQ" TextAlignment="Center"/>
+                        </Button>
+                    </Grid>
+
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1.05*"/>
+                            <ColumnDefinition Width="1.6*"/>
+                            <ColumnDefinition Width="1.05*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Border Grid.Column="0" Style="{StaticResource CardBorderStyle}" Margin="0,0,10,0">
+                            <StackPanel>
+                                <TextBlock Text="주요 평가영역" Style="{StaticResource SectionTitleStyle}"/>
+                                <UniformGrid Columns="1" Rows="6" Margin="0,2,0,0">
+                                    <Border Style="{StaticResource EvaluationTileStyle}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="◉" Style="{StaticResource EvaluationIconStyle}"/>
+                                            <TextBlock Text="자연적 감시" Style="{StaticResource EvaluationLabelStyle}"/>
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Style="{StaticResource EvaluationTileStyle}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="▣" Style="{StaticResource EvaluationIconStyle}"/>
+                                            <TextBlock Text="접근 통제" Style="{StaticResource EvaluationLabelStyle}"/>
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Style="{StaticResource EvaluationTileStyle}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="═" Style="{StaticResource EvaluationIconStyle}"/>
+                                            <TextBlock Text="영역성 강화" Style="{StaticResource EvaluationLabelStyle}"/>
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Style="{StaticResource EvaluationTileStyle}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="▥" Style="{StaticResource EvaluationIconStyle}"/>
+                                            <TextBlock Text="활동성 증대" Style="{StaticResource EvaluationLabelStyle}"/>
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Style="{StaticResource EvaluationTileStyle}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="⌘" Style="{StaticResource EvaluationIconStyle}"/>
+                                            <TextBlock Text="유지관리" Style="{StaticResource EvaluationLabelStyle}"/>
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Style="{StaticResource EvaluationTileStyle}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="▦" Style="{StaticResource EvaluationIconStyle}"/>
+                                            <TextBlock Text="공용공간 관리" Style="{StaticResource EvaluationLabelStyle}"/>
+                                        </StackPanel>
+                                    </Border>
+                                </UniformGrid>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Grid.Column="1" Style="{StaticResource CardBorderStyle}" Margin="0,0,10,0">
+                            <StackPanel>
+                                <TextBlock Text="BIM 모델링 가이드" Style="{StaticResource SectionTitleStyle}"/>
+                                <Grid Margin="0,1,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="112"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="출입구 가시성" Style="{StaticResource GuideLabelStyle}" Margin="0,0,0,7"/>
+                                    <TextBlock Grid.Row="0" Grid.Column="1" Text="주요 출입구와 시야 확보를 모델링하여 가시성을 확보하세요." Style="{StaticResource GuideTextStyle}" Margin="0,0,0,7"/>
+                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="조명 계획" Style="{StaticResource GuideLabelStyle}" Margin="0,0,0,7"/>
+                                    <TextBlock Grid.Row="1" Grid.Column="1" Text="야간 조명 범위와 조도 수준을 계획하여 모델에 반영하세요." Style="{StaticResource GuideTextStyle}" Margin="0,0,0,7"/>
+                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="CCTV 위치" Style="{StaticResource GuideLabelStyle}" Margin="0,0,0,7"/>
+                                    <TextBlock Grid.Row="2" Grid.Column="1" Text="CCTV 설치 위치와 커버리지를 모델에 정확히 표현하세요." Style="{StaticResource GuideTextStyle}" Margin="0,0,0,7"/>
+                                    <TextBlock Grid.Row="3" Grid.Column="0" Text="비상벨" Style="{StaticResource GuideLabelStyle}" Margin="0,0,0,7"/>
+                                    <TextBlock Grid.Row="3" Grid.Column="1" Text="비상벨 설치 위치와 이용 범위를 표시하세요." Style="{StaticResource GuideTextStyle}" Margin="0,0,0,7"/>
+                                    <TextBlock Grid.Row="4" Grid.Column="0" Text="사각지대 최소화" Style="{StaticResource GuideLabelStyle}" Margin="0,0,0,7"/>
+                                    <TextBlock Grid.Row="4" Grid.Column="1" Text="사각지대가 발생하지 않도록 동선과 시야를 검토하세요." Style="{StaticResource GuideTextStyle}" Margin="0,0,0,7"/>
+                                    <TextBlock Grid.Row="5" Grid.Column="0" Text="주차장/공용공간" Style="{StaticResource GuideLabelStyle}"/>
+                                    <TextBlock Grid.Row="5" Grid.Column="1" Text="주차장 및 공용공간의 시야·조명·접근 통제를 계획하세요." Style="{StaticResource GuideTextStyle}"/>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Grid.Column="2" Style="{StaticResource CardBorderStyle}">
+                            <StackPanel>
+                                <TextBlock Text="필수 파라미터" Style="{StaticResource SectionTitleStyle}"/>
+                                <Grid Margin="0,1,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1.1*"/>
+                                        <ColumnDefinition Width="1.65*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource TinyHeaderStyle}">
+                                        <TextBlock Text="필드 키" FontSize="11" FontWeight="Bold"/>
+                                    </Border>
+                                    <Border Grid.Row="0" Grid.Column="1" Style="{StaticResource TinyHeaderStyle}">
+                                        <TextBlock Text="설명" FontSize="11" FontWeight="Bold"/>
+                                    </Border>
+                                    <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource TinyCellStyle}">
+                                        <TextBlock Text="VisibilityRange" Style="{StaticResource ParameterKeyStyle}"/>
+                                    </Border>
+                                    <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource TinyCellStyle}">
+                                        <TextBlock Text="자연적 감시 유효 거리 (m)" Style="{StaticResource ParameterTextStyle}"/>
+                                    </Border>
+                                    <Border Grid.Row="2" Grid.Column="0" Style="{StaticResource TinyCellStyle}">
+                                        <TextBlock Text="LightingLevel" Style="{StaticResource ParameterKeyStyle}"/>
+                                    </Border>
+                                    <Border Grid.Row="2" Grid.Column="1" Style="{StaticResource TinyCellStyle}">
+                                        <TextBlock Text="조명 평균 조도 (lux)" Style="{StaticResource ParameterTextStyle}"/>
+                                    </Border>
+                                    <Border Grid.Row="3" Grid.Column="0" Style="{StaticResource TinyCellStyle}">
+                                        <TextBlock Text="CCTVCoverage" Style="{StaticResource ParameterKeyStyle}"/>
+                                    </Border>
+                                    <Border Grid.Row="3" Grid.Column="1" Style="{StaticResource TinyCellStyle}">
+                                        <TextBlock Text="CCTV 커버리지 비율 (%)" Style="{StaticResource ParameterTextStyle}"/>
+                                    </Border>
+                                    <Border Grid.Row="4" Grid.Column="0" Style="{StaticResource TinyCellStyle}">
+                                        <TextBlock Text="EmergencyBell" Style="{StaticResource ParameterKeyStyle}"/>
+                                    </Border>
+                                    <Border Grid.Row="4" Grid.Column="1" Style="{StaticResource TinyCellStyle}">
+                                        <TextBlock Text="비상벨 설치 여부 (Yes/No)" Style="{StaticResource ParameterTextStyle}"/>
+                                    </Border>
+                                    <Border Grid.Row="5" Grid.Column="0" Style="{StaticResource TinyCellStyle}">
+                                        <TextBlock Text="EntranceControl" Style="{StaticResource ParameterKeyStyle}"/>
+                                    </Border>
+                                    <Border Grid.Row="5" Grid.Column="1" Style="{StaticResource TinyCellStyle}">
+                                        <TextBlock Text="출입 통제 방식" Style="{StaticResource ParameterTextStyle}"/>
+                                    </Border>
+                                    <Border Grid.Row="6" Grid.Column="0" Style="{StaticResource TinyCellStyle}">
+                                        <TextBlock Text="ParkingSafety" Style="{StaticResource ParameterKeyStyle}"/>
+                                    </Border>
+                                    <Border Grid.Row="6" Grid.Column="1" Style="{StaticResource TinyCellStyle}">
+                                        <TextBlock Text="주차장 안전 관리 수준" Style="{StaticResource ParameterTextStyle}"/>
+                                    </Border>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <Border Grid.Row="2" Style="{StaticResource CardBorderStyle}" Margin="0,10,0,0" Padding="10">
+                        <StackPanel>
+                            <TextBlock Text="개발 연계 데이터 항목" Style="{StaticResource SectionTitleStyle}"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1.15*"/>
+                                    <ColumnDefinition Width="1.2*"/>
+                                    <ColumnDefinition Width="1.3*"/>
+                                    <ColumnDefinition Width="1.2*"/>
+                                    <ColumnDefinition Width="0.85*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource TinyHeaderStyle}"><TextBlock Text="FieldKey" FontWeight="Bold"/></Border>
+                                <Border Grid.Row="0" Grid.Column="1" Style="{StaticResource TinyHeaderStyle}"><TextBlock Text="표시명" FontWeight="Bold"/></Border>
+                                <Border Grid.Row="0" Grid.Column="2" Style="{StaticResource TinyHeaderStyle}"><TextBlock Text="Revit Category" FontWeight="Bold"/></Border>
+                                <Border Grid.Row="0" Grid.Column="3" Style="{StaticResource TinyHeaderStyle}"><TextBlock Text="파라미터" FontWeight="Bold"/></Border>
+                                <Border Grid.Row="0" Grid.Column="4" Style="{StaticResource TinyHeaderStyle}"><TextBlock Text="예시" FontWeight="Bold"/></Border>
+
+                                <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource TinyCellStyle}"><TextBlock Text="VisibilityRange"/></Border>
+                                <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource TinyCellStyle}"><TextBlock Text="자연적 감시 유효 거리"/></Border>
+                                <Border Grid.Row="1" Grid.Column="2" Style="{StaticResource TinyCellStyle}"><TextBlock Text="Rooms"/></Border>
+                                <Border Grid.Row="1" Grid.Column="3" Style="{StaticResource TinyCellStyle}"><TextBlock Text="자연감시_유효거리 (m)"/></Border>
+                                <Border Grid.Row="1" Grid.Column="4" Style="{StaticResource TinyCellStyle}"><TextBlock Text="25.00 m"/></Border>
+
+                                <Border Grid.Row="2" Grid.Column="0" Style="{StaticResource TinyCellStyle}"><TextBlock Text="LightingLevel"/></Border>
+                                <Border Grid.Row="2" Grid.Column="1" Style="{StaticResource TinyCellStyle}"><TextBlock Text="평균 조도"/></Border>
+                                <Border Grid.Row="2" Grid.Column="2" Style="{StaticResource TinyCellStyle}"><TextBlock Text="Lighting Fixtures"/></Border>
+                                <Border Grid.Row="2" Grid.Column="3" Style="{StaticResource TinyCellStyle}"><TextBlock Text="평균조도 (lux)"/></Border>
+                                <Border Grid.Row="2" Grid.Column="4" Style="{StaticResource TinyCellStyle}"><TextBlock Text="30.0 lux"/></Border>
+
+                                <Border Grid.Row="3" Grid.Column="0" Style="{StaticResource TinyCellStyle}"><TextBlock Text="CCTVCoverage"/></Border>
+                                <Border Grid.Row="3" Grid.Column="1" Style="{StaticResource TinyCellStyle}"><TextBlock Text="CCTV 커버리지 비율"/></Border>
+                                <Border Grid.Row="3" Grid.Column="2" Style="{StaticResource TinyCellStyle}"><TextBlock Text="Security Devices"/></Border>
+                                <Border Grid.Row="3" Grid.Column="3" Style="{StaticResource TinyCellStyle}"><TextBlock Text="CCTV_커버리지 (%)"/></Border>
+                                <Border Grid.Row="3" Grid.Column="4" Style="{StaticResource TinyCellStyle}"><TextBlock Text="92.5 %"/></Border>
+
+                                <Border Grid.Row="4" Grid.Column="0" Style="{StaticResource TinyCellStyle}"><TextBlock Text="EmergencyBell"/></Border>
+                                <Border Grid.Row="4" Grid.Column="1" Style="{StaticResource TinyCellStyle}"><TextBlock Text="비상벨 설치 여부"/></Border>
+                                <Border Grid.Row="4" Grid.Column="2" Style="{StaticResource TinyCellStyle}"><TextBlock Text="Specialty Equipment"/></Border>
+                                <Border Grid.Row="4" Grid.Column="3" Style="{StaticResource TinyCellStyle}"><TextBlock Text="비상벨_설치여부"/></Border>
+                                <Border Grid.Row="4" Grid.Column="4" Style="{StaticResource TinyCellStyle}"><TextBlock Text="Yes"/></Border>
+
+                                <Border Grid.Row="5" Grid.Column="0" Style="{StaticResource TinyCellStyle}"><TextBlock Text="EntranceControl"/></Border>
+                                <Border Grid.Row="5" Grid.Column="1" Style="{StaticResource TinyCellStyle}"><TextBlock Text="출입 통제 방식"/></Border>
+                                <Border Grid.Row="5" Grid.Column="2" Style="{StaticResource TinyCellStyle}"><TextBlock Text="Doors"/></Border>
+                                <Border Grid.Row="5" Grid.Column="3" Style="{StaticResource TinyCellStyle}"><TextBlock Text="출입통제_유형"/></Border>
+                                <Border Grid.Row="5" Grid.Column="4" Style="{StaticResource TinyCellStyle}"><TextBlock Text="카드 + 비밀번호"/></Border>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <Grid Grid.Row="3" Margin="0,10,0,0">
+                    <Button Content="닫기"
+                            Width="82"
+                            Height="28"
+                            HorizontalAlignment="Right"
+                            Click="OnClose"/>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
