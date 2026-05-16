@@ -1,5 +1,6 @@
 ﻿// System
 using System.Windows;
+using System.Windows.Interop;
 using Window = System.Windows.Window;
 using Visibility = System.Windows.Visibility;
 
@@ -98,7 +99,8 @@ namespace IBIMCA.Utilities
             RegisterWindow(window);
 
             // Show the window, set pointer
-            window.Show(handle);
+            new WindowInteropHelper(window).Owner = handle;
+            window.Show();
         }
 
         /// <summary>

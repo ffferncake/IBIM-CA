@@ -140,7 +140,7 @@ namespace IBIMCA.Utilities
                         var line = reader.ReadLine();
                         
                         // If the row is not empty, add it
-                        if (!line.IsNullOrEmpty())
+                        if (!string.IsNullOrEmpty(line))
                         {
                             rows.Add(line);
                         }
@@ -216,7 +216,7 @@ namespace IBIMCA.Utilities
                                 var line = reader.ReadLine();
 
                                 // If the row is not empty, add it
-                                if (!line.IsNullOrEmpty())
+                                if (!string.IsNullOrEmpty(line))
                                 {
                                     rows.Add(line);
                                 }

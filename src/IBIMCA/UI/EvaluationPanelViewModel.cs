@@ -13,23 +13,23 @@ namespace IBIMCA.UI
     {
         bool _isChecked;
         bool _isExpanded;
-        int _score;
+        double _score;
         int _level;
 
         public string Id { get; set; } = "";
         public string Title { get; set; } = "";
         public int MaxScore { get; set; }
 
-        public int Score
+        public double Score
         {
             get => _score;
             set
             {
-                int clamped = value;
+                double clamped = value;
                 if (clamped < 0) clamped = 0;
                 if (MaxScore > 0 && clamped > MaxScore) clamped = MaxScore;
 
-                if (_score == clamped) return;
+                if (Math.Abs(_score - clamped) < 0.0001) return;
                 _score = clamped;
                 OnPropertyChanged();
             }
@@ -116,10 +116,10 @@ namespace IBIMCA.UI
         public int CheckedCount => FlattenAll(RootNodes).Count(x => x.IsChecked);
 
         public int TotalMaxScore => FlattenAll(RootNodes).Sum(x => x.MaxScore);
-        public int TotalScore => FlattenAll(RootNodes).Sum(x => x.Score);
+        public double TotalScore => FlattenAll(RootNodes).Sum(x => x.Score);
 
         public string StatusItems => $"항목: {CheckedCount} / {TotalCount}";
-        public string StatusScore => $"점수: {TotalScore} / {TotalMaxScore}";
+        public string StatusScore => $"점수: {FormatScore(TotalScore)} / {TotalMaxScore}";
         public string StatusPercent =>
             TotalMaxScore == 0
                 ? "백분율: 0.00%"
@@ -140,6 +140,7 @@ namespace IBIMCA.UI
             });
 
             BuildBFStructure();
+            ApplyBfSampleResults();
             RebuildVisibleRows();
         }
 
@@ -148,23 +149,23 @@ namespace IBIMCA.UI
             // 1. 매개시설
             var n1 = NewNode("1", "1. 매개시설", maxScore: 64, level: 0, expanded: true);
 
-            var n11 = NewNode("1.1", "1.1 접근로", level: 1, expanded: true);
-            n11.Children.Add(NewLeaf("1.1.1", "1.1.1 보도에서 주출입구까지 보행로", maxScore: 2, level: 2));
-            n11.Children.Add(NewLeaf("1.1.2", "1.1.2 유효폭", maxScore: 2, level: 2));
-            n11.Children.Add(NewLeaf("1.1.3", "1.1.3 단차", maxScore: 2, level: 2));
-            n11.Children.Add(NewLeaf("1.1.4", "1.1.4 기울기", maxScore: 2, level: 2));
-            n11.Children.Add(NewLeaf("1.1.5", "1.1.5 바닥마감", maxScore: 2, level: 2));
-            n11.Children.Add(NewLeaf("1.1.6", "1.1.6 보행장애물", maxScore: 2, level: 2));
+            var n11 = NewNode("1.1", "1.1 접근로", maxScore: 22, level: 1, expanded: true);
+            n11.Children.Add(NewLeaf("1.1.1", "1.1.1 보도에서 주출입구까지 보행로(정성평가)", maxScore: 6, level: 2));
+            n11.Children.Add(NewLeaf("1.1.2", "1.1.2 유효폭(정성평가)", maxScore: 3, level: 2));
+            n11.Children.Add(NewLeaf("1.1.3", "1.1.3 단차(정성평가)", maxScore: 3, level: 2));
+            n11.Children.Add(NewLeaf("1.1.4", "1.1.4 기울기", maxScore: 3, level: 2));
+            n11.Children.Add(NewLeaf("1.1.5", "1.1.5 바닥 마감(정성평가)", maxScore: 3, level: 2));
+            n11.Children.Add(NewLeaf("1.1.6", "1.1.6 보행장애물(정성평가)", maxScore: 2, level: 2));
             n11.Children.Add(NewLeaf("1.1.7", "1.1.7 덮개", maxScore: 2, level: 2));
 
-            var n12 = NewNode("1.2", "1.2 장애인 전용주차 구역", level: 1, expanded: false);
+            var n12 = NewNode("1.2", "1.2 장애인 전용주차 구역", maxScore: 21, level: 1, expanded: false);
             n12.Children.Add(NewLeaf("1.2.1", "1.2.1 주차장에서 출입구까지의 경로", maxScore: 2, level: 2));
             n12.Children.Add(NewLeaf("1.2.2", "1.2.2 주차면수 확보", maxScore: 2, level: 2));
             n12.Children.Add(NewLeaf("1.2.3", "1.2.3 주차구역 크기", maxScore: 2, level: 2));
             n12.Children.Add(NewLeaf("1.2.4", "1.2.4 보행 안전통로", maxScore: 2, level: 2));
             n12.Children.Add(NewLeaf("1.2.5", "1.2.5 안내 및 유도표시", maxScore: 2, level: 2));
 
-            var n13 = NewNode("1.3", "1.3 주출입구 (문)", level: 1, expanded: false);
+            var n13 = NewNode("1.3", "1.3 주출입구", maxScore: 21, level: 1, expanded: false);
             n13.Children.Add(NewLeaf("1.3.1", "1.3.1 주출입구의 높이 차이", maxScore: 2, level: 2));
             n13.Children.Add(NewLeaf("1.3.2", "1.3.2 주출입문의 형태", maxScore: 2, level: 2));
             n13.Children.Add(NewLeaf("1.3.3", "1.3.3 유효폭", maxScore: 2, level: 2));
@@ -180,11 +181,11 @@ namespace IBIMCA.UI
             // 2. 내부시설 (샘플 일부)
             var n2 = NewNode("2", "2. 내부시설", maxScore: 63, level: 0, expanded: false);
 
-            var n21 = NewNode("2.1", "2.1 일반출입문", level: 1, expanded: true);
-            n21.Children.Add(NewLeaf("2.1.1", "2.1.1 단차", maxScore: 2, level: 2));
-            n21.Children.Add(NewLeaf("2.1.2", "2.1.2 유효폭", maxScore: 2, level: 2));
-            n21.Children.Add(NewLeaf("2.1.3", "2.1.3 전후면 유효거리", maxScore: 2, level: 2));
-            n21.Children.Add(NewLeaf("2.1.4", "2.1.4 손잡이 및 점자표지판", maxScore: 2, level: 2));
+            var n21 = NewNode("2.1", "2.1 일반출입문", maxScore: 12, level: 1, expanded: true);
+            n21.Children.Add(NewLeaf("2.1.1", "2.1.1 단차(정성평가)", maxScore: 3, level: 2));
+            n21.Children.Add(NewLeaf("2.1.2", "2.1.2 유효폭", maxScore: 3, level: 2));
+            n21.Children.Add(NewLeaf("2.1.3", "2.1.3 전후면 유효거리", maxScore: 3, level: 2));
+            n21.Children.Add(NewLeaf("2.1.4", "2.1.4 손잡이 및 점자표지판", maxScore: 3, level: 2));
 
             n2.Children.Add(n21);
 
@@ -192,6 +193,36 @@ namespace IBIMCA.UI
 
             RootNodes.Add(n1);
             RootNodes.Add(n2);
+        }
+
+        private void ApplyBfSampleResults()
+        {
+            Set("1", 37.4, "일반");
+            Set("1.1", 12.8, "일반");
+            Set("1.1.1", 4.8, "우수");
+            Set("1.1.2", 2.4, "우수");
+            Set("1.1.3", 2.4, "우수");
+            Set("1.1.4", 0, "부적합");
+            Set("1.1.5", 2.4, "우수");
+            Set("1.1.6", 0.8, "우수");
+            Set("1.1.7", 0, "N/A");
+            Set("1.2", 17.6, "우수");
+            Set("1.3", 7, "일반");
+            Set("2", 32.75, "일반");
+            Set("2.1", 4.8, "일반");
+            Set("2.1.1", 2.4, "우수");
+            Set("2.1.2", 0, "부적합");
+            Set("2.1.3", 1.2, "일반");
+            Set("2.1.4", 1.2, "일반");
+        }
+
+        private void Set(string id, double score, string result)
+        {
+            var node = FlattenAll(RootNodes).FirstOrDefault(x => x.Id == id);
+            if (node == null) return;
+
+            node.Score = score;
+            node.Result = result;
         }
 
         private EvaluationNode NewNode(string id, string title, int maxScore = 0, int level = 0, bool expanded = false)
@@ -268,6 +299,15 @@ namespace IBIMCA.UI
             OnPropertyChanged(nameof(StatusPercent));
             OnPropertyChanged(nameof(StatusGrade));
         }
+
+        public string StatusFacilityItems => "시설별 평가항목 개수: 19/19";
+        public string BfStatusItems => "항목: 94 / 94";
+        public string BfStatusScore => "점수: 182.65 / 288";
+        public string BfStatusPercent => "백분율: 63.42%";
+        public string BfStatusGrade => "등급: 부적합";
+
+        public static string FormatScore(double value)
+            => Math.Abs(value - Math.Round(value)) < 0.0001 ? $"{value:0}" : $"{value:0.##}";
     }
 
     public class RelayCommand<T> : ICommand

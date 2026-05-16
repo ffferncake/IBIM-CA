@@ -74,7 +74,7 @@ namespace IBIMCA.Extensions
             var familyTypes = familyManager.Types
                 .Cast<FamilyType>()
                 .Where(t => t is not null)
-                .Where(t => !t.Name.IsNullOrEmpty())
+                .Where(t => !string.IsNullOrEmpty(t.Name))
                 .ToList();
 
             // Return successful outcome

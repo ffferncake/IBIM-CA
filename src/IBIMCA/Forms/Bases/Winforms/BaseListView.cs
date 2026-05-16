@@ -140,7 +140,7 @@ namespace IBIMCA.Forms.Bases
         private bool PassesTextFilter(string text)
         {
             // True if filter is empty
-            if (this.FilterString.IsNullOrEmpty())
+            if (string.IsNullOrEmpty(this.FilterString))
             {
                 return true;
             }

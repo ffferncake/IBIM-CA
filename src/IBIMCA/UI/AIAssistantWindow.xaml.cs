@@ -1,4 +1,4 @@
-﻿using System.Windows;
+using System.Windows;
 
 namespace IBIMCA.UI
 {
@@ -9,7 +9,6 @@ namespace IBIMCA.UI
             InitializeComponent();
         }
 
-        // ✅ WPF KeyEventHandler 정확한 시그니처
         private void OnInputKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if (e.Key == System.Windows.Input.Key.Enter && DataContext is AIAssistantViewModel vm)

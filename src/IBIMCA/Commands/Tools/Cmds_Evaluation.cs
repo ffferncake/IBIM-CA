@@ -40,8 +40,17 @@ namespace IBIMCA.Commands.Tools
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-            Autodesk.Revit.UI.TaskDialog.Show("IBIMCA", "G-SEED 평가 패널은 다음 단계에서 연결할 수 있습니다.");
-            return Result.Succeeded;
+            try
+            {
+                GSeedEvaluationPanelWindowHost.EnsureShown();
+                return Result.Succeeded;
+            }
+            catch (Exception ex)
+            {
+                message = ex.ToString();
+                Autodesk.Revit.UI.TaskDialog.Show("IBIMCA Error - OpenGSeedEvaluationPanel", ex.ToString());
+                return Result.Failed;
+            }
         }
     }
 
@@ -50,8 +59,17 @@ namespace IBIMCA.Commands.Tools
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-            Autodesk.Revit.UI.TaskDialog.Show("IBIMCA", "CPTED 평가 패널은 다음 단계에서 연결할 수 있습니다.");
-            return Result.Succeeded;
+            try
+            {
+                CptedEvaluationPanelWindowHost.EnsureShown();
+                return Result.Succeeded;
+            }
+            catch (Exception ex)
+            {
+                message = ex.ToString();
+                Autodesk.Revit.UI.TaskDialog.Show("IBIMCA Error - OpenCptedEvaluationPanel", ex.ToString());
+                return Result.Failed;
+            }
         }
     }
 
@@ -65,31 +83,7 @@ namespace IBIMCA.Commands.Tools
         {
             try
             {
-                // 1) Ensure the same window is shown (same UI as Button 3)
-                var vm = EvaluationPanelWindowHost.EnsureShown();
-
-                // 2) Evaluate ONLY leaf rows (set Score + Result)
-                foreach (var node in FlattenAll(vm.RootNodes))
-                {
-                    if (!node.HasChildren)
-                    {
-                        // Example rule: if last digit of Id is even => "우수", else "N/A"
-                        char lastChar = node.Id?.Length > 0 ? node.Id[^1] : '\0';
-
-                        bool isExcellent = char.IsDigit(lastChar) && ((lastChar - '0') % 2 == 0);
-
-                        node.Score = isExcellent ? node.MaxScore : 0;
-                        node.Result = isExcellent ? "우수" : "N/A";
-                    }
-                }
-
-                // 3) Roll-up to group rows (1, 1.1, 2, ...)
-                foreach (var root in vm.RootNodes)
-                    Rollup(root);
-
-                // 4) Update bottom status texts
-                vm.NotifyStatusChanged();
-
+                RunFullEvaluationWindowHost.EnsureShown();
                 return Result.Succeeded;
             }
             catch (Exception ex)

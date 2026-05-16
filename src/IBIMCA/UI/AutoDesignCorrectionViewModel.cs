@@ -28,9 +28,23 @@ namespace IBIMCA.UI
         public ICommand GenerateSuggestionCommand { get; }
         public ICommand ExportCommand { get; }
         public ICommand FinishCommand { get; }
+        public ICommand LoadOptionsCommand { get; }
+        public ICommand RunRecommendationCommand { get; }
 
         public AutoDesignCorrectionViewModel()
         {
+            LoadOptionsCommand = new RelayCommand(_ =>
+            {
+                Autodesk.Revit.UI.TaskDialog.Show("설계 대안 추천 실행 옵션", "저장된 설계 대안 추천 옵션을 불러왔습니다.");
+            });
+
+            RunRecommendationCommand = new RelayCommand(_ =>
+            {
+                Autodesk.Revit.UI.TaskDialog.Show(
+                    "설계 대안 추천 실행 옵션",
+                    "추천 실행을 시작합니다.\n\n인증 체계: BF\n목표 등급: 최우수 (90점 이상)\n평가 범위: 현재 활성 뷰\n적용 방식: 검토 후 적용\n추천 유형: 미달 / 감점 / 상위등급");
+            });
+
             // 데모: 평가항목 검색 버튼(.....) 눌렀을 때 값 채우기
             PickEvaluationItemCommand = new RelayCommand(_ =>
             {
