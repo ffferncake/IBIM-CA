@@ -1,175 +1,354 @@
-﻿<Window x:Class="IBIMCA.UI.ResultColorVisualizationWindow"
+<Window x:Class="IBIMCA.UI.ResultColorVisualizationWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="평가 결과 색상 가시화"
-        Height="480" Width="520"
+        Title="평가결과 객체 색상 가시화"
+        Height="700" Width="1120"
+        MinHeight="640" MinWidth="1040"
         WindowStartupLocation="CenterOwner"
-        ResizeMode="NoResize">
+        ResizeMode="CanResize"
+        Background="#F5F8FC"
+        FontFamily="Malgun Gothic"
+        FontSize="13">
+
+    <Window.Resources>
+        <SolidColorBrush x:Key="BrandBlue" Color="#0B3A78"/>
+        <SolidColorBrush x:Key="HeaderBlue" Color="#1F5A98"/>
+        <SolidColorBrush x:Key="Line" Color="#D8E2F0"/>
+        <SolidColorBrush x:Key="SoftBlue" Color="#F3F8FF"/>
+        <SolidColorBrush x:Key="TextDark" Color="#0F2544"/>
+
+        <Style x:Key="PanelBorder" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Line}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="6"/>
+        </Style>
+
+        <Style x:Key="IconButton" TargetType="Button">
+            <Setter Property="Width" Value="28"/>
+            <Setter Property="Height" Value="26"/>
+            <Setter Property="Margin" Value="6,0,0,0"/>
+            <Setter Property="Background" Value="#174F93"/>
+            <Setter Property="BorderBrush" Value="#174F93"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <Style x:Key="BlueTabItem" TargetType="TabItem">
+            <Setter Property="Padding" Value="16,7"/>
+            <Setter Property="Foreground" Value="#0F2544"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+
+        <Style x:Key="ColorChip" TargetType="Border">
+            <Setter Property="Width" Value="14"/>
+            <Setter Property="Height" Value="14"/>
+            <Setter Property="CornerRadius" Value="2"/>
+            <Setter Property="Margin" Value="0,0,8,0"/>
+        </Style>
+
+        <Style x:Key="ResultHeader" TargetType="Border">
+            <Setter Property="Background" Value="#EAF3FF"/>
+            <Setter Property="BorderBrush" Value="#C8DAF0"/>
+            <Setter Property="BorderThickness" Value="0,0,1,1"/>
+            <Setter Property="Padding" Value="8,6"/>
+        </Style>
+
+        <Style x:Key="ResultCell" TargetType="Border">
+            <Setter Property="BorderBrush" Value="#D8E2F0"/>
+            <Setter Property="BorderThickness" Value="0,0,1,1"/>
+            <Setter Property="Padding" Value="8,6"/>
+        </Style>
+    </Window.Resources>
 
     <Grid Margin="12">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="42"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="156"/>
         </Grid.RowDefinitions>
 
-        <!-- Header -->
-        <Border Grid.Row="0" Background="#F3F3F3" Padding="10" BorderBrush="#BFBFBF" BorderThickness="1">
+        <Border Grid.Row="0"
+                Background="{StaticResource BrandBlue}"
+                CornerRadius="4,4,0,0"
+                Padding="12,0">
             <DockPanel>
-                <TextBlock Text="평가 결과 색상 가시화"
-                           FontWeight="SemiBold"
+                <TextBlock Text="평가결과 객체 색상 가시화"
+                           Foreground="White"
+                           FontSize="16"
+                           FontWeight="Bold"
                            VerticalAlignment="Center"/>
-
-                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Width="28" Height="26" Margin="8,0,0,0" Content="◀" ToolTip="뒤로"/>
-                    <Button Width="28" Height="26" Margin="6,0,0,0" Content="X" ToolTip="닫기" Click="OnClose"/>
+                <TextBlock Text="인증별 평가항목을 선택하면 해당 결과 색상 규칙을 미리 확인합니다."
+                           Foreground="#D9E8FA"
+                           FontSize="12"
+                           Margin="14,0,0,0"
+                           VerticalAlignment="Center"/>
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Content="?" Style="{StaticResource IconButton}" ToolTip="도움말"/>
+                    <Button Content="X" Style="{StaticResource IconButton}" ToolTip="닫기" Click="OnClose"/>
                 </StackPanel>
             </DockPanel>
         </Border>
 
-        <!-- 평가항목 선택 -->
-        <GroupBox Grid.Row="1" Header="평가항목 선택" Margin="0,12,0,0">
-            <Grid Margin="10">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="90"/>
-                </Grid.ColumnDefinitions>
-
-                <TextBox Grid.Column="0" Height="30"
-                         VerticalContentAlignment="Center"
-                         Text="{Binding EvaluationItem, UpdateSourceTrigger=PropertyChanged}"
-                         ToolTip="평가항목"/>
-
-                <Button Grid.Column="1" Height="30" Margin="10,0,0,0"
-                        Content="....."
-                        Command="{Binding PickEvaluationItemCommand}"/>
-            </Grid>
-        </GroupBox>
-
-        <!-- 최우수 -->
-        <GroupBox Grid.Row="2" Header="평가 등급별 가시화 (최우수)" Margin="0,12,0,0">
-            <Grid Margin="10">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="80"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="46"/>
-                </Grid.ColumnDefinitions>
-
-                <!-- 패턴 -->
-                <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="패턴:"/>
-                <ComboBox Grid.Row="0" Grid.Column="1" Height="26"
-                          ItemsSource="{Binding PatternOptions}"
-                          SelectedItem="{Binding BestPattern}"/>
-                <Button Grid.Row="0" Grid.Column="2" Height="26" Margin="8,0,0,0"
-                        Content="..."
-                        Command="{Binding PickBestPatternCommand}"/>
-
-                <!-- 색상 -->
-                <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="색상:" Margin="0,8,0,0"/>
-                <Grid Grid.Row="1" Grid.Column="1" Margin="0,8,0,0">
+        <TabControl Grid.Row="1"
+                    Margin="0,10,0,10"
+                    Background="#F5F8FC"
+                    BorderBrush="{StaticResource Line}"
+                    Style="{x:Null}"
+                    ItemContainerStyle="{StaticResource BlueTabItem}">
+            <TabItem Header="BF">
+                <Grid Margin="0,10,0,0">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="26"/>
+                        <ColumnDefinition Width="245"/>
                         <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="220"/>
                     </Grid.ColumnDefinitions>
 
-                    <Border Grid.Column="0" Width="20" Height="16"
-                            BorderBrush="Black" BorderThickness="1"
-                            Background="{Binding BestColorBrush}"
-                            VerticalAlignment="Center"/>
-                    <TextBox Grid.Column="1" Height="26" Margin="8,0,0,0"
-                             VerticalContentAlignment="Center"
-                             Text="{Binding BestColorText}"
-                             IsReadOnly="True"/>
+                    <Border Grid.Column="0" Style="{StaticResource PanelBorder}" Padding="12">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="평가항목 선택" FontWeight="Bold" Foreground="{StaticResource TextDark}" Margin="0,0,0,10"/>
+                            <TextBox Grid.Row="1" Height="28" Text="항목 검색" Foreground="#8A98AA" Padding="8,0" VerticalContentAlignment="Center" Margin="0,0,0,10"/>
+                            <TreeView Grid.Row="2" BorderBrush="#D8E2F0" BorderThickness="1" Padding="6">
+                                <TreeViewItem Header="BF 인증" IsExpanded="True">
+                                    <TreeViewItem Header="1. 매개시설" IsExpanded="True">
+                                        <TreeViewItem Header="1.1 접근로">
+                                            <TreeViewItem Header="1.1.1 보행로" IsSelected="True"/>
+                                            <TreeViewItem Header="1.1.2 유효폭"/>
+                                            <TreeViewItem Header="1.1.3 기울기"/>
+                                        </TreeViewItem>
+                                        <TreeViewItem Header="1.2 장애인 전용 주차구역"/>
+                                        <TreeViewItem Header="1.3 주출입구"/>
+                                    </TreeViewItem>
+                                    <TreeViewItem Header="2. 내부시설"/>
+                                </TreeViewItem>
+                            </TreeView>
+                        </Grid>
+                    </Border>
+
+                    <Grid Grid.Column="1" Margin="10,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" Style="{StaticResource PanelBorder}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="34"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="3D 결과 View" FontWeight="Bold" Foreground="{StaticResource TextDark}" VerticalAlignment="Center" Margin="10,0"/>
+                                <Border Grid.Row="1" Background="White" Margin="8" CornerRadius="3"/>
+                            </Grid>
+                        </Border>
+                        <Border Grid.Column="2" Style="{StaticResource PanelBorder}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="34"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="평면도 (지상 10층)" FontWeight="Bold" Foreground="{StaticResource TextDark}" VerticalAlignment="Center" Margin="10,0"/>
+                                <Border Grid.Row="1" Background="White" Margin="8" CornerRadius="3"/>
+                            </Grid>
+                        </Border>
+                    </Grid>
+
+                    <Border Grid.Column="2" Style="{StaticResource PanelBorder}" Padding="12">
+                        <StackPanel>
+                            <TextBlock Text="가시화 옵션" FontWeight="Bold" Foreground="{StaticResource TextDark}" Margin="0,0,0,10"/>
+                            <RadioButton Content="등급별 색상" IsChecked="True" Margin="0,0,0,6"/>
+                            <RadioButton Content="평가결과 색상" Margin="0,0,0,6"/>
+                            <CheckBox Content="미흡/불합격만 표시" Margin="0,12,0,6"/>
+                            <CheckBox Content="현재 View에 적용" IsChecked="True" Margin="0,0,0,6"/>
+                            <CheckBox Content="새 3D View 생성" Margin="0,0,0,14"/>
+
+                            <TextBlock Text="색상 범례" FontWeight="Bold" Foreground="{StaticResource TextDark}" Margin="0,4,0,10"/>
+                            <StackPanel>
+                                <DockPanel Margin="0,0,0,6"><Border Style="{StaticResource ColorChip}" Background="#2366D1"/><TextBlock Text="최우수 / 파랑"/></DockPanel>
+                                <DockPanel Margin="0,0,0,6"><Border Style="{StaticResource ColorChip}" Background="#1EA64A"/><TextBlock Text="우수 / 초록"/></DockPanel>
+                                <DockPanel Margin="0,0,0,6"><Border Style="{StaticResource ColorChip}" Background="#F28C28"/><TextBlock Text="일반 / 주황"/></DockPanel>
+                                <DockPanel Margin="0,0,0,6"><Border Style="{StaticResource ColorChip}" Background="#9A4B18"/><TextBlock Text="부적합 / 빨강"/></DockPanel>
+                                <DockPanel><Border Style="{StaticResource ColorChip}" Background="#A8B8CC"/><TextBlock Text="미평가 / 회색"/></DockPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
                 </Grid>
+            </TabItem>
 
-                <!-- 두께 -->
-                <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Text="두께:" Margin="0,8,0,0"/>
-                <ComboBox Grid.Row="2" Grid.Column="1" Height="26" Margin="0,8,0,0"
-                          ItemsSource="{Binding WeightOptions}"
-                          SelectedItem="{Binding BestWeight}"/>
-            </Grid>
-        </GroupBox>
+            <TabItem Header="GB">
+                <Grid Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="245"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="220"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="0" Style="{StaticResource PanelBorder}" Padding="12">
+                        <TreeView BorderBrush="#D8E2F0" BorderThickness="1" Padding="6">
+                            <TreeViewItem Header="G-SEED 인증" IsExpanded="True">
+                                <TreeViewItem Header="1. 토지이용 및 교통" IsExpanded="True">
+                                    <TreeViewItem Header="1.1 생태적 가치"/>
+                                    <TreeViewItem Header="1.2 인접대지 영향"/>
+                                </TreeViewItem>
+                                <TreeViewItem Header="2. 에너지 및 환경오염" IsExpanded="True">
+                                    <TreeViewItem Header="2.1 에너지 성능" IsSelected="True"/>
+                                    <TreeViewItem Header="2.2 TAB 및 커미셔닝"/>
+                                    <TreeViewItem Header="2.3 신재생에너지"/>
+                                </TreeViewItem>
+                                <TreeViewItem Header="3. 재료 및 자원"/>
+                            </TreeViewItem>
+                        </TreeView>
+                    </Border>
+                    <Grid Grid.Column="1" Margin="10,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" Style="{StaticResource PanelBorder}">
+                            <Border Background="White" Margin="42" CornerRadius="3"/>
+                        </Border>
+                        <Border Grid.Column="2" Style="{StaticResource PanelBorder}">
+                            <Border Background="White" Margin="42" CornerRadius="3"/>
+                        </Border>
+                    </Grid>
+                    <Border Grid.Column="2" Style="{StaticResource PanelBorder}" Padding="12">
+                        <StackPanel>
+                            <TextBlock Text="색상 범례" FontWeight="Bold" Foreground="{StaticResource TextDark}" Margin="0,0,0,10"/>
+                            <DockPanel Margin="0,0,0,6"><Border Style="{StaticResource ColorChip}" Background="#2366D1"/><TextBlock Text="1등급 / 파랑"/></DockPanel>
+                            <DockPanel Margin="0,0,0,6"><Border Style="{StaticResource ColorChip}" Background="#1EA64A"/><TextBlock Text="2등급 / 초록"/></DockPanel>
+                            <DockPanel Margin="0,0,0,6"><Border Style="{StaticResource ColorChip}" Background="#EAB308"/><TextBlock Text="3등급 / 노랑"/></DockPanel>
+                            <DockPanel Margin="0,0,0,6"><Border Style="{StaticResource ColorChip}" Background="#F28C28"/><TextBlock Text="4등급 / 주황"/></DockPanel>
+                            <DockPanel><Border Style="{StaticResource ColorChip}" Background="#9A4B18"/><TextBlock Text="부적합 / 빨강"/></DockPanel>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </TabItem>
 
-        <!-- 우수 -->
-        <GroupBox Grid.Row="3" Header="평가 등급별 가시화 (우수)" Margin="0,12,0,0">
-            <Grid Margin="10">
+            <TabItem Header="CPTED">
+                <Grid Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="245"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="220"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="0" Style="{StaticResource PanelBorder}" Padding="12">
+                        <TreeView BorderBrush="#D8E2F0" BorderThickness="1" Padding="6">
+                            <TreeViewItem Header="CPTED 인증" IsExpanded="True">
+                                <TreeViewItem Header="자연적 감시" IsExpanded="True">
+                                    <TreeViewItem Header="배치 계획" IsSelected="True"/>
+                                    <TreeViewItem Header="조명 계획"/>
+                                </TreeViewItem>
+                                <TreeViewItem Header="접근 통제"/>
+                                <TreeViewItem Header="영역성 강화"/>
+                                <TreeViewItem Header="유지관리"/>
+                            </TreeViewItem>
+                        </TreeView>
+                    </Border>
+                    <Grid Grid.Column="1" Margin="10,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" Style="{StaticResource PanelBorder}">
+                            <Border Background="White" Margin="42" CornerRadius="3"/>
+                        </Border>
+                        <Border Grid.Column="2" Style="{StaticResource PanelBorder}">
+                            <Border Background="White" Margin="42" CornerRadius="3"/>
+                        </Border>
+                    </Grid>
+                    <Border Grid.Column="2" Style="{StaticResource PanelBorder}" Padding="12">
+                        <StackPanel>
+                            <TextBlock Text="색상 범례" FontWeight="Bold" Foreground="{StaticResource TextDark}" Margin="0,0,0,10"/>
+                            <DockPanel Margin="0,0,0,6"><Border Style="{StaticResource ColorChip}" Background="#1EA64A"/><TextBlock Text="PASS / 초록"/></DockPanel>
+                            <DockPanel><Border Style="{StaticResource ColorChip}" Background="#9A4B18"/><TextBlock Text="FAIL / 빨강"/></DockPanel>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="전체">
+                <Border Margin="0,10,0,0" Style="{StaticResource PanelBorder}" Padding="24">
+                    <StackPanel>
+                        <TextBlock Text="인증별 평가항목 요약" FontSize="18" FontWeight="Bold" Foreground="{StaticResource TextDark}" Margin="0,0,0,18"/>
+                        <TextBlock Text="BF, GB, CPTED 탭에서 각 인증별 평가항목과 색상 범례를 확인할 수 있습니다."/>
+                    </StackPanel>
+                </Border>
+            </TabItem>
+        </TabControl>
+
+        <Border Grid.Row="2" Style="{StaticResource PanelBorder}" Padding="10">
+            <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="80"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="46"/>
-                </Grid.ColumnDefinitions>
-
-                <!-- 패턴 -->
-                <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="패턴:"/>
-                <ComboBox Grid.Row="0" Grid.Column="1" Height="26"
-                          ItemsSource="{Binding PatternOptions}"
-                          SelectedItem="{Binding GoodPattern}"/>
-                <Button Grid.Row="0" Grid.Column="2" Height="26" Margin="8,0,0,0"
-                        Content="..."
-                        Command="{Binding PickGoodPatternCommand}"/>
-
-                <!-- 색상 -->
-                <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="색상:" Margin="0,8,0,0"/>
-                <Grid Grid.Row="1" Grid.Column="1" Margin="0,8,0,0">
+                <TextBlock Text="결과 객체 리스트" FontWeight="Bold" Foreground="{StaticResource TextDark}" Margin="0,0,0,8"/>
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="28"/>
+                        <RowDefinition Height="28"/>
+                        <RowDefinition Height="28"/>
+                        <RowDefinition Height="28"/>
+                    </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="26"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="1.2*"/>
+                        <ColumnDefinition Width="0.8*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="0.8*"/>
+                        <ColumnDefinition Width="0.8*"/>
+                        <ColumnDefinition Width="0.8*"/>
+                        <ColumnDefinition Width="2*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Border Grid.Column="0" Width="20" Height="16"
-                            BorderBrush="Black" BorderThickness="1"
-                            Background="{Binding GoodColorBrush}"
-                            VerticalAlignment="Center"/>
-                    <TextBox Grid.Column="1" Height="26" Margin="8,0,0,0"
-                             VerticalContentAlignment="Center"
-                             Text="{Binding GoodColorText}"
-                             IsReadOnly="True"/>
+                    <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource ResultHeader}"><TextBlock Text="층" FontWeight="Bold"/></Border>
+                    <Border Grid.Row="0" Grid.Column="1" Style="{StaticResource ResultHeader}"><TextBlock Text="등급" FontWeight="Bold"/></Border>
+                    <Border Grid.Row="0" Grid.Column="2" Style="{StaticResource ResultHeader}"><TextBlock Text="ElementId" FontWeight="Bold"/></Border>
+                    <Border Grid.Row="0" Grid.Column="3" Style="{StaticResource ResultHeader}"><TextBlock Text="측정값" FontWeight="Bold"/></Border>
+                    <Border Grid.Row="0" Grid.Column="4" Style="{StaticResource ResultHeader}"><TextBlock Text="기준값" FontWeight="Bold"/></Border>
+                    <Border Grid.Row="0" Grid.Column="5" Style="{StaticResource ResultHeader}"><TextBlock Text="상태" FontWeight="Bold"/></Border>
+                    <Border Grid.Row="0" Grid.Column="6" Style="{StaticResource ResultHeader}"><TextBlock Text="메시지" FontWeight="Bold"/></Border>
+
+                    <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource ResultCell}"><TextBlock Text="지상10층" Foreground="#2366D1" FontWeight="SemiBold"/></Border>
+                    <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource ResultCell}"><TextBlock Text="최우수" Foreground="#2366D1" FontWeight="SemiBold"/></Border>
+                    <Border Grid.Row="1" Grid.Column="2" Style="{StaticResource ResultCell}"><TextBlock Text="1907222"/></Border>
+                    <Border Grid.Row="1" Grid.Column="3" Style="{StaticResource ResultCell}"><TextBlock Text="1.44m"/></Border>
+                    <Border Grid.Row="1" Grid.Column="4" Style="{StaticResource ResultCell}"><TextBlock Text="1.0m"/></Border>
+                    <Border Grid.Row="1" Grid.Column="5" Style="{StaticResource ResultCell}"><TextBlock Text="PASS" Foreground="#2366D1" FontWeight="Bold"/></Border>
+                    <Border Grid.Row="1" Grid.Column="6" Style="{StaticResource ResultCell}"><TextBlock Text="문의 유효폭: 1.44m"/></Border>
+
+                    <Border Grid.Row="2" Grid.Column="0" Style="{StaticResource ResultCell}"><TextBlock Text="지상10층" Foreground="#1EA64A" FontWeight="SemiBold"/></Border>
+                    <Border Grid.Row="2" Grid.Column="1" Style="{StaticResource ResultCell}"><TextBlock Text="우수" Foreground="#1EA64A" FontWeight="SemiBold"/></Border>
+                    <Border Grid.Row="2" Grid.Column="2" Style="{StaticResource ResultCell}"><TextBlock Text="1929083"/></Border>
+                    <Border Grid.Row="2" Grid.Column="3" Style="{StaticResource ResultCell}"><TextBlock Text="1.12m"/></Border>
+                    <Border Grid.Row="2" Grid.Column="4" Style="{StaticResource ResultCell}"><TextBlock Text="1.0m"/></Border>
+                    <Border Grid.Row="2" Grid.Column="5" Style="{StaticResource ResultCell}"><TextBlock Text="PASS" Foreground="#1EA64A" FontWeight="Bold"/></Border>
+                    <Border Grid.Row="2" Grid.Column="6" Style="{StaticResource ResultCell}"><TextBlock Text="문의 유효폭: 1.12m"/></Border>
+
+                    <Border Grid.Row="3" Grid.Column="0" Style="{StaticResource ResultCell}"><TextBlock Text="지하2층" Foreground="#F28C28" FontWeight="SemiBold"/></Border>
+                    <Border Grid.Row="3" Grid.Column="1" Style="{StaticResource ResultCell}"><TextBlock Text="미흡" Foreground="#F28C28" FontWeight="SemiBold"/></Border>
+                    <Border Grid.Row="3" Grid.Column="2" Style="{StaticResource ResultCell}"><TextBlock Text="773239"/></Border>
+                    <Border Grid.Row="3" Grid.Column="3" Style="{StaticResource ResultCell}"><TextBlock Text="0.86m"/></Border>
+                    <Border Grid.Row="3" Grid.Column="4" Style="{StaticResource ResultCell}"><TextBlock Text="1.0m"/></Border>
+                    <Border Grid.Row="3" Grid.Column="5" Style="{StaticResource ResultCell}"><TextBlock Text="FAIL" Foreground="#F28C28" FontWeight="Bold"/></Border>
+                    <Border Grid.Row="3" Grid.Column="6" Style="{StaticResource ResultCell}"><TextBlock Text="문의 유효폭: 0.86m"/></Border>
+
+                    <Border Grid.Row="4" Grid.Column="0" Style="{StaticResource ResultCell}"><TextBlock Text="지하1층" Foreground="#9A4B18" FontWeight="SemiBold"/></Border>
+                    <Border Grid.Row="4" Grid.Column="1" Style="{StaticResource ResultCell}"><TextBlock Text="불합격" Foreground="#9A4B18" FontWeight="SemiBold"/></Border>
+                    <Border Grid.Row="4" Grid.Column="2" Style="{StaticResource ResultCell}"><TextBlock Text="771929"/></Border>
+                    <Border Grid.Row="4" Grid.Column="3" Style="{StaticResource ResultCell}"><TextBlock Text="0.78m"/></Border>
+                    <Border Grid.Row="4" Grid.Column="4" Style="{StaticResource ResultCell}"><TextBlock Text="1.0m"/></Border>
+                    <Border Grid.Row="4" Grid.Column="5" Style="{StaticResource ResultCell}"><TextBlock Text="FAIL" Foreground="#9A4B18" FontWeight="Bold"/></Border>
+                    <Border Grid.Row="4" Grid.Column="6" Style="{StaticResource ResultCell}"><TextBlock Text="기준 미달"/></Border>
                 </Grid>
-
-                <!-- 두께 -->
-                <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Text="두께:" Margin="0,8,0,0"/>
-                <ComboBox Grid.Row="2" Grid.Column="1" Height="26" Margin="0,8,0,0"
-                          ItemsSource="{Binding WeightOptions}"
-                          SelectedItem="{Binding GoodWeight}"/>
             </Grid>
-        </GroupBox>
-
-        <!-- Spacer -->
-        <Border Grid.Row="4"/>
-
-        <!-- Bottom buttons -->
-        <Grid Grid.Row="5" Margin="0,14,0,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-
-            <Button Grid.Column="0" Width="44" Height="34" Content="◀" ToolTip="뒤로"/>
-
-            <Button Grid.Column="2" Width="110" Height="34" Margin="0,0,10,0"
-                    Content="되돌리기" Command="{Binding RevertCommand}"/>
-
-            <Button Grid.Column="3" Width="90" Height="34" Margin="0,0,10,0"
-                    Content="적용" Command="{Binding ApplyCommand}"/>
-
-            <Button Grid.Column="4" Width="90" Height="34"
-                    Content="완료" Command="{Binding FinishCommand}"/>
-        </Grid>
+        </Border>
     </Grid>
 </Window>
