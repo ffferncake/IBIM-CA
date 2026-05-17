@@ -92,30 +92,63 @@
                     Background="#F7F9FC"
                     BorderBrush="#D6E4F3">
             <TabItem Header="BF">
-                <DataGrid ItemsSource="{Binding BfItems}"
-                          Margin="8"
-                          AutoGenerateColumns="False"
-                          CanUserAddRows="False"
-                          CanUserDeleteRows="False"
-                          HeadersVisibility="Column"
-                          GridLinesVisibility="All"
-                          IsReadOnly="False"
-                          RowHeight="34"
-                          AlternationCount="2"
-                          RowBackground="#FFFFFF"
-                          AlternatingRowBackground="#F2F7FD"
-                          BorderBrush="#D6E4F3"
-                          HorizontalGridLinesBrush="#D6E4F3"
-                          VerticalGridLinesBrush="#D6E4F3"
-                          ColumnHeaderStyle="{StaticResource CptedGridHeaderStyle}"
-                          CellStyle="{StaticResource CptedGridCellStyle}"
-                          RowStyle="{StaticResource BlueGridRowStyle}">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="유형" Binding="{Binding Category}" Width="180" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="속성" Binding="{Binding Name}" Width="*" IsReadOnly="True"/>
-                        <DataGridCheckBoxColumn Header="적용" Binding="{Binding IsEnabled}" Width="70"/>
-                    </DataGrid.Columns>
-                </DataGrid>
+                <Grid Margin="8">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="118"/>
+                    </Grid.RowDefinitions>
+
+                    <DataGrid Grid.Row="0"
+                              ItemsSource="{Binding BfItems}"
+                              AutoGenerateColumns="False"
+                              CanUserAddRows="False"
+                              CanUserDeleteRows="False"
+                              HeadersVisibility="Column"
+                              GridLinesVisibility="All"
+                              IsReadOnly="False"
+                              RowHeight="42"
+                              AlternationCount="2"
+                              RowBackground="#FFFFFF"
+                              AlternatingRowBackground="#F2F7FD"
+                              BorderBrush="#D6E4F3"
+                              HorizontalGridLinesBrush="#D6E4F3"
+                              VerticalGridLinesBrush="#D6E4F3"
+                              ColumnHeaderStyle="{StaticResource CptedGridHeaderStyle}"
+                              CellStyle="{StaticResource CptedGridCellStyle}"
+                              RowStyle="{StaticResource BlueGridRowStyle}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="No." Binding="{Binding No}" Width="56" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="유형 (Type)" Binding="{Binding Category}" Width="150" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="속성 (Property)" Binding="{Binding Name}" Width="220" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="기본값" Binding="{Binding DefaultText}" Width="90" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="UI 컨트롤" Binding="{Binding UiControl}" Width="100" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="데이터 타입" Binding="{Binding DataType}" Width="100" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="DB 필드명" Binding="{Binding DbField}" Width="150" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="개발 비고" Binding="{Binding DevNotes}" Width="*" IsReadOnly="True"/>
+                            <DataGridCheckBoxColumn Header="적용" Binding="{Binding IsEnabled}" Width="62"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <Border Grid.Row="1"
+                            Margin="0,10,0,0"
+                            BorderBrush="#D6E4F3"
+                            BorderThickness="1"
+                            CornerRadius="6"
+                            Background="#F8FBFF"
+                            Padding="12">
+                        <ItemsControl ItemsSource="{Binding BfNotes}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Text}"
+                                               Foreground="#0F2A44"
+                                               FontSize="12"
+                                               TextWrapping="Wrap"
+                                               Margin="0,0,0,4"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Border>
+                </Grid>
             </TabItem>
 
             <TabItem Header="G-SEED">
@@ -139,10 +172,17 @@
                           CellStyle="{StaticResource CptedGridCellStyle}"
                           RowStyle="{StaticResource BlueGridRowStyle}">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="유형" Binding="{Binding Type}" Width="220" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="인증항목" Binding="{Binding CertificationItem}" Width="230" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="정보" Binding="{Binding Info}" Width="*" IsReadOnly="True"/>
-                        <DataGridCheckBoxColumn Header="" Binding="{Binding IsEnabled}" Width="90"/>
+                        <DataGridTextColumn Header="No." Binding="{Binding No}" Width="56" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="유형 (Category)" Binding="{Binding Category}" Width="160" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="인증항목" Binding="{Binding PrimaryItem}" Width="170" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="정보/속성" Binding="{Binding SecondaryItem}" Width="240" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="기본값" Binding="{Binding DefaultText}" Width="90" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="UI 컨트롤" Binding="{Binding UiControl}" Width="95" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="데이터 타입" Binding="{Binding DataType}" Width="100" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="입력범위/옵션" Binding="{Binding Options}" Width="180" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="DB 필드명" Binding="{Binding DbField}" Width="160" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="개발 비고" Binding="{Binding DevNotes}" Width="*" IsReadOnly="True"/>
+                        <DataGridCheckBoxColumn Header="적용" Binding="{Binding IsEnabled}" Width="62"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>
@@ -166,10 +206,17 @@
                           CellStyle="{StaticResource CptedGridCellStyle}"
                           RowStyle="{StaticResource BlueGridRowStyle}">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="115" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="인증제도" Binding="{Binding Certification}" Width="95" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="대분류" Binding="{Binding MajorCategory}" Width="140" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="인증항목(대표사항)" Binding="{Binding RepresentativeItem}" Width="*" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="No." Binding="{Binding No}" Width="56" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="평가분야" Binding="{Binding Category}" Width="170" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="평가항목" Binding="{Binding PrimaryItem}" Width="150" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="평가기준/속성" Binding="{Binding SecondaryItem}" Width="280" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="기본값" Binding="{Binding DefaultText}" Width="90" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="UI 컨트롤" Binding="{Binding UiControl}" Width="95" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="데이터 타입" Binding="{Binding DataType}" Width="100" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="입력범위/옵션" Binding="{Binding Options}" Width="170" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="DB 필드명" Binding="{Binding DbField}" Width="160" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="개발 비고 및 산출기준" Binding="{Binding DevNotes}" Width="*" IsReadOnly="True"/>
+                        <DataGridCheckBoxColumn Header="적용" Binding="{Binding IsEnabled}" Width="62"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>
